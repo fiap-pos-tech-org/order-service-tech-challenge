@@ -1,0 +1,29 @@
+name: Build and Create PR to Main
+
+on:
+  pull_request:
+    types: closed
+    branches: develop
+
+jobs:
+  build:
+    if: github.event.pull_request.merged
+    uses: ./.github/workflows/reusable-workflow-build.yml
+
+  create_pull_request:
+    name: Create Pull Request to Main
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/create-pull-request
+        with:
+          source_branch: 'develop'
+          target_branch: 'main'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
