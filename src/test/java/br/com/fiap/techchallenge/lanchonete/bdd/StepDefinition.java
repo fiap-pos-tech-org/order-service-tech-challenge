@@ -1,27 +1,47 @@
 package br.com.fiap.techchallenge.lanchonete.bdd;
 
+import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.ProdutoRequest;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ProdutoResponse;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
+import io.restassured.response.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.equalTo;
 
-class StepDefinition {
+import static io.restassured.RestAssured.given;
+
+public class StepDefinition {
+
+    private static final String ENDPOINT_PRODUTOS = "http://localhost:8080/produtos";
+
+    private Response response;
+    private ProdutoResponse produtoResponse;
 
     @Quando("preencher todos os dados para cadastro do produto")
     public void preencherTodosDadosParaCadastrarProduto() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        var produtoRequest = ProdutoTestBase.criarProdutoRequest();
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(produtoRequest)
+                .when()
+                .post(ENDPOINT_PRODUTOS);
     }
 
     @Então("o produto deve ser criado com sucesso")
-    public void produtoDeveSerCriadoComSucesso() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void o_produto_deve_ser_criado_com_sucesso() {
+        response.then()
+                .statusCode(HttpStatus.CREATED.value());
     }
 
     @Então("deve exibir o produto cadastrado")
     public void deveExibirProdutoCadastrado() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        response.then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body(matchesJsonSchemaInClasspath("./schemas/ProdutoResponseSchema.json"));
     }
 
     @Dado("que um produto já está cadastrado")
