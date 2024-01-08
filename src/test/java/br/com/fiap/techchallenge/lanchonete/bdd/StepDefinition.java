@@ -32,7 +32,7 @@ public class StepDefinition {
     }
 
     @Então("o produto deve ser criado com sucesso")
-    public void o_produto_deve_ser_criado_com_sucesso() {
+    public void produtoDeveSerCriadoComSucesso() {
         response.then()
                 .statusCode(HttpStatus.CREATED.value());
     }

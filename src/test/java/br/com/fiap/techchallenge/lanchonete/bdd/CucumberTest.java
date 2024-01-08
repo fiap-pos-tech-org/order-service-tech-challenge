@@ -7,5 +7,5 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
-class CucumberTest {
+public class CucumberTest {
 }
