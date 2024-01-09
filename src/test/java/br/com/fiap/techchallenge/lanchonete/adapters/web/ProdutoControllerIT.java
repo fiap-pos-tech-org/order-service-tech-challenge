@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.ProdutoRequest;
+import io.qameta.allure.restassured.AllureRestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class ProdutoControllerIT {
     public void setup() {
         RestAssured.port = port;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        // RestAssured.filters(new AllureRestAssured()); // desta forma com nested class gera informação duplicada
     }
 
     @Nested
@@ -46,6 +48,7 @@ class ProdutoControllerIT {
         void deveCriarProduto() {
             var produtoRequest = ProdutoTestBase.criarProdutoRequest();
             given()
+                    .filter(new AllureRestAssured())
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .body(produtoRequest)
                     .when()

@@ -69,6 +69,25 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
         minikube service lanchonete-service --url
     ```
 
+### Para rodar os testes do projeto execute os comandos abaixo:
+
+1. Testes unitários:
+    ```bash
+        mvn test
+    ```
+2. Testes integrados:
+    ```bash
+        mvn test -P integration-test
+    ```
+3. Testes de sistema:
+    ```bash
+        mvn test -P system-test
+    ```
+4. Testes de sistema filtrando por tags:
+    ```bash
+        mvn test -P system-test -Dcucumber.filter.tags="@smoke"
+    ```
+
 ## Contribuidores
 - [pedroprj](https://github.com/pedroprj) - Pedro Pereira dos Reis Júnior - pedrojr9119@gmail.com - RM 350295
 - [diego-jo](https://github.com/diego-jo) - Diego José Oliveira - oliveiraj.diego@gmail.com - RM 350296
