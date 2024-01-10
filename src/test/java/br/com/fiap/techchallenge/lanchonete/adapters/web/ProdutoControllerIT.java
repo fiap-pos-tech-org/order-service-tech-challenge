@@ -1,17 +1,8 @@
 package br.com.fiap.techchallenge.lanchonete.adapters.web;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
-
-import java.util.UUID;
-
 import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
-import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.ProdutoRequest;
 import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,11 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/clean.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -54,7 +42,8 @@ class ProdutoControllerIT {
                     .when()
                     .post("/produtos")
                     .then()
-                    .statusCode(HttpStatus.CREATED.value());
+                    .statusCode(HttpStatus.CREATED.value())
+                    .body(matchesJsonSchemaInClasspath("./schemas/ProdutoResponseSchema.json"));
         }
 
     }
