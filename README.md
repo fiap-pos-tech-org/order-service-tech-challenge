@@ -42,7 +42,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
     ```
 3. Execute o comando para buildar o projeto: 
     ```bash
-        ./mvnw clean package -DskipTests
+        ./mvnw clean package
     ```
 4. Execute o comando para iniciar o ambiente Docker: 
     ```bash
