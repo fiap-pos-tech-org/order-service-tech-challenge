@@ -60,6 +60,29 @@
 			<artifactId>okhttp</artifactId>
 			<version>2.7.5</version>
 		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -67,6 +90,40 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludes>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/repository/models/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/repository/jpa</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/web/handlers/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/web/models/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/domain/entities/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/domain/exceptions/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/ports</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/**/*DTO.*</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/LanchoneteApplication.*</exclude>
+						<exclude>**/config/*</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

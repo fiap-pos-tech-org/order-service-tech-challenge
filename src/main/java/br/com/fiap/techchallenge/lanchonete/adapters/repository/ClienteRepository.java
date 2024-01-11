@@ -45,6 +45,7 @@ public class ClienteRepository implements AtualizaClienteOutputPort, BuscaClient
         }
     }
 
+    // implement unit tests for the buscar(String cpf) method
     @Override
     public ClienteDTO buscar(String cpf) {
         Cliente cliente = clienteJpaRepository.findByCpf(cpf)

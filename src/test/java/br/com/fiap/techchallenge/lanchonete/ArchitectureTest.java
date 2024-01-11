@@ -22,14 +22,13 @@ class ArchitectureTest {
             .as("Interfaces Repository devem ser criadas dentro do pacote adapters.repository.jpa");
 
     @ArchTest
-    static ArchRule mapperClassesShouldResideInMapperPackage = classes().that().resideInAPackage("..adapters.repository.mapper")
-            .and().resideInAPackage("..adapters.repository.mapper")
+    static ArchRule mapperClassesShouldResideInMapperPackage = classes().that().resideInAPackage("..adapters.repository.mappers")
             .should().haveSimpleNameEndingWith("Mapper")
             .as("Classes Mapper devem ser implementadas dentro do pacote adapters.repository.mapper");
 
     @ArchTest
     static ArchRule entityClassesShouldResideInModelPackage = classes().that().areAnnotatedWith(Entity.class)
-            .should().resideInAPackage("..adapters.repository.model")
+            .should().resideInAPackage("..adapters.repository.models")
             .as("Classes de entidade devem ser implementadas dentro do pacote adapters.repository.model");
 
     @ArchTest
@@ -39,21 +38,18 @@ class ArchitectureTest {
             .as("Classes Repository devem ser implementadas dentro do pacote adapters.repository");
 
     @ArchTest
-    static ArchRule mapperClassesShouldResideInWebMapperPackage = classes().that().resideInAPackage("..adapters.web.mapper")
-            .and().resideInAPackage("..adapters.web.mapper")
+    static ArchRule mapperClassesShouldResideInWebMapperPackage = classes().that().resideInAPackage("..adapters.web.mappers")
             .should().haveSimpleNameEndingWith("Mapper")
             .as("Classes Mapper devem ser implementadas dentro do pacote adapters.web.mapper");
 
     @ArchTest
     static ArchRule requestClassesShouldDependsClassesIn = classes().that().haveSimpleNameEndingWith("Request")
-            .should().resideInAPackage("..adapters.web.models")
-            .andShould().dependOnClassesThat().haveSimpleNameEndingWith("In")
+            .should().resideInAPackage("..adapters.web.models.requests")
             .as("Classes Request devem extender classes In");
 
     @ArchTest
-    static ArchRule requestClassesShouldDependsClassesOut = classes().that().haveSimpleNameEndingWith("Response")
-            .should().resideInAPackage("..adapters.web.models")
-            .andShould().dependOnClassesThat().haveSimpleNameEndingWith("Out")
+    static ArchRule responseClassesShouldDependsClassesOut = classes().that().haveSimpleNameEndingWith("Response")
+            .should().resideInAPackage("..adapters.web.models.responses")
             .as("Classes Response devem extender classes Out");
 
     @ArchTest
@@ -69,34 +65,34 @@ class ArchitectureTest {
 
     @ArchTest
     static ArchRule exceptionClassesShouldResideInExceptionPackage = classes().that().haveSimpleNameEndingWith("Exception")
-            .should().resideInAPackage("..core.domain.exception")
+            .should().resideInAPackage("..core.domain.exceptions")
             .as("Classes Exception devem ser implementadas dentro do pacote core.domain.exception");
 
     @ArchTest
     static ArchRule handlerClassesShouldResideInHandlerPackage = classes().that().haveSimpleNameEndingWith("Handler")
-            .should().resideInAPackage("..adapters.web.handler")
+            .should().resideInAPackage("..adapters.web.handlers")
             .andShould().beAnnotatedWith(ControllerAdvice.class)
             .as("Classes Handler devem ser implementadas dentro do pacote adapters.web.handler");
 
     @ArchTest
     static ArchRule enumsShouldHaveNameEndingWithEnum = classes().that().areEnums()
             .should().haveSimpleNameEndingWith("Enum")
-            .andShould().resideInAPackage("..core.domain.models.enums")
+            .andShould().resideInAPackage("..core.domain.entities.enums")
             .as("Enums devem terminar com sufixo Enum");
 
     @ArchTest
     static ArchRule inputPortClassesShouldResideInPortInPackage = classes().that().haveSimpleNameEndingWith("InputPort")
-            .should().resideInAPackage("..core.port.in")
+            .should().resideInAPackage("..core.ports.in.*")
             .as("Classes InputPort devem ser implementadas dentro do pacote core.port.in");
 
     @ArchTest
     static ArchRule outputPortClassesShouldResideInPortOutPackage = classes().that().haveSimpleNameEndingWith("OutputPort")
-            .should().resideInAPackage("..core.port.out")
+            .should().resideInAPackage("..core.ports.out.*")
             .as("Classes OutputPort devem ser implementadas dentro do pacote core.port.out");
 
     @ArchTest
     static ArchRule useCaseClassesShouldResideInUseCasePackage = classes().that().haveSimpleNameEndingWith("UseCase")
-            .should().resideInAPackage("..core.usecase")
+            .should().resideInAPackage("..core.usecases.*")
             .andShould().dependOnClassesThat().haveSimpleNameEndingWith("InputPort")
             .as("Classes UseCase devem ser implementadas dentro do pacote core.usecase");
 

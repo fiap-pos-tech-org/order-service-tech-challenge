@@ -4,11 +4,11 @@ import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaClientePorInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.cliente.BuscaClienteOutputPort;
 
-public class BuscaClientePorUseCase implements BuscaClientePorInputPort {
+public class BuscaClientePorIdOuCpfUseCase implements BuscaClientePorInputPort {
 
     private final BuscaClienteOutputPort buscaClienteOutputPort;
 
-    public BuscaClientePorUseCase(BuscaClienteOutputPort buscaClienteOutputPort) {
+    public BuscaClientePorIdOuCpfUseCase(BuscaClienteOutputPort buscaClienteOutputPort) {
         this.buscaClienteOutputPort = buscaClienteOutputPort;
     }
 
