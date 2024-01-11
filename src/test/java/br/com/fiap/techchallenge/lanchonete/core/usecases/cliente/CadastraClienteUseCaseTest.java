@@ -9,6 +9,7 @@ import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,7 +31,6 @@ public class CadastraClienteUseCaseTest {
     private CadastraClienteUseCase clienteUseCase;
     private ClienteDTO clienteDTO;
     private Cliente clienteSalvo;
-    private Long id;
 
     AutoCloseable openMocks;
 
@@ -39,9 +39,8 @@ public class CadastraClienteUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new CadastraClienteUseCase(clienteRepository);
 
-        id = 2L;
-        clienteSalvo = new Cliente("cliente", "000.000.000-01", "cliente@email.com");
-        clienteDTO = new ClienteDTO("cliente1", "000.000.000-07", "cliente1@email.com");
+        clienteSalvo = ClienteTesteBase.criaDefaultCliente();
+        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
     }
 
     @AfterEach
@@ -50,7 +49,8 @@ public class CadastraClienteUseCaseTest {
     }
 
     @Test
-    void shouldReturnClienteStored_WhenPassedRightValues() {
+    @DisplayName("Deve cadastrar cliente e retornar cliente cadastrado quando dados cadastrais forem corretamente informados")
+    void deveCadastrarClienteERetornarClienteCadastrado_QuandoDadosCadastraisForemCorretamenteInformados() {
         //Arrange
         when(clienteJpaRepository.save(clienteSalvo)).thenReturn(clienteSalvo);
         when(mapper.toCliente(clienteDTO)).thenReturn(clienteSalvo);
@@ -68,7 +68,8 @@ public class CadastraClienteUseCaseTest {
     }
 
     @Test
-    void shouldThrowBadRequestException_WhenCpfOrEmailIsInvalid() {
+    @DisplayName("Deve lançar BadRequestException quando CPF ou email forem inválidos")
+    void deveLancarBadRequestException_QuandoCpfOuEmailForemInvalidos() {
         //Arrange
         when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(ConstraintViolationException.class);
         when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());
@@ -84,7 +85,8 @@ public class CadastraClienteUseCaseTest {
     }
 
     @Test
-    void shouldThrowBadRequestException_WhenCpfOrEmailIsAlreadyInUse() {
+    @DisplayName("Deve lançar BadRequestException quando CPF ou email já estiverem em uso")
+    void deveLancarBadRequestException_QuandoCpfOuEmailJaEstiveremEmUso() {
         //Arrange
         when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(DataIntegrityViolationException.class);
         when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());

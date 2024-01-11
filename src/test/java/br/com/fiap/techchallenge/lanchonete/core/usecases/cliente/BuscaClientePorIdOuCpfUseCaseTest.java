@@ -8,6 +8,7 @@ import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoun
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,9 +31,9 @@ public class BuscaClientePorIdOuCpfUseCaseTest {
     private BuscaClientePorIdOuCpfUseCase clienteUseCase;
     private ClienteDTO clienteDTO;
     private Cliente clienteSalvo;
-    private String cpf;
-    private Long id;
-    private Long notFoundId;
+    private final String CPF = "20000000001";
+    private final Long ID = 2L;
+    private final Long NOT_FOUND_ID = 2000L;
 
     AutoCloseable openMocks;
 
@@ -41,12 +42,8 @@ public class BuscaClientePorIdOuCpfUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new BuscaClientePorIdOuCpfUseCase(clienteRepository);
 
-
-        cpf = "20000000001";
-        id = 2L;
-        notFoundId = 2000L;
-        clienteSalvo = new Cliente("cliente", "000.000.000-01", "cliente@email.com");
-        clienteDTO = new ClienteDTO("cliente1", "000.000.000-07", "cliente1@email.com");
+        clienteSalvo = ClienteTesteBase.criaDefaultCliente();
+        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
     }
 
     @AfterEach
@@ -55,54 +52,58 @@ public class BuscaClientePorIdOuCpfUseCaseTest {
     }
 
     @Test
-    void shouldFindCliente_WhenPassedRightCpf() {
+    @DisplayName("Deve buscar cliente quando informado um CPF válido")
+    void deveBuscarCliente_QuandoInformadoUmCpfValido() {
         //Arrange
-        when(clienteJpaRepository.findByCpf(cpf)).thenReturn(Optional.of(clienteSalvo));
+        when(clienteJpaRepository.findByCpf(CPF)).thenReturn(Optional.of(clienteSalvo));
         when(mapper.toClienteDTO(clienteSalvo)).thenReturn(clienteDTO);
 
         //Act
-        ClienteDTO cliente = clienteUseCase.buscar(cpf);
+        ClienteDTO cliente = clienteUseCase.buscar(CPF);
 
         //Assert
         assertNotNull(cliente);
-        verify(clienteJpaRepository, times(1)).findByCpf(cpf);
+        verify(clienteJpaRepository, times(1)).findByCpf(CPF);
     }
 
     @Test
-    void shouldThrowEntityNotFoundException_WhenPassedNonExistentCpf() {
+    @DisplayName("Deve lançar EntityNotFoundException quando um CPF não cadastrado for informado")
+    void deveLancarEntityNotFoundException_QuandoUmCpfNaoCadastradoForInformado() {
         //Arrange
-        String message = String.format("Cliente com CPF %s não encontrado", cpf);
-        when(clienteJpaRepository.findByCpf(cpf)).thenReturn(Optional.empty());
+        String message = String.format("Cliente com CPF %s não encontrado", CPF);
+        when(clienteJpaRepository.findByCpf(CPF)).thenReturn(Optional.empty());
 
         //Act
         //Assert
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> clienteUseCase.buscar(cpf));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> clienteUseCase.buscar(CPF));
         assertEquals(message, exception.getMessage());
     }
 
     @Test
-    void shouldFindCliente_WhenPassedRightId() {
+    @DisplayName("Deve buscar cliente quando informado um ID válido")
+    void deveBuscarCliente_QuandoInformadoUmIdValido() {
         //Arrange
-        when(clienteJpaRepository.findById(id)).thenReturn(Optional.of(clienteSalvo));
+        when(clienteJpaRepository.findById(ID)).thenReturn(Optional.of(clienteSalvo));
         when(mapper.toClienteDTO(clienteSalvo)).thenReturn(clienteDTO);
 
         //Act
-        ClienteDTO cliente = clienteUseCase.buscar(id);
+        ClienteDTO cliente = clienteUseCase.buscar(ID);
 
         //Assert
         assertNotNull(cliente);
-        verify(clienteJpaRepository, times(1)).findById(id);
+        verify(clienteJpaRepository, times(1)).findById(ID);
     }
 
     @Test
-    void shouldThrowEntityNotFoundException_WhenPassedNonExistentId() {
+    @DisplayName("Deve lançar EntityNotFoundException quando um ID não cadastrado for informado")
+    void deveLancarEntityNotFoundException_QuandoUmIdNaoCadastradoForInformado() {
         //Arrange
-        String message = String.format("Cliente com id %s não encontrado", notFoundId);
-        when(clienteJpaRepository.findById(notFoundId)).thenReturn(Optional.empty());
+        String message = String.format("Cliente com id %s não encontrado", NOT_FOUND_ID);
+        when(clienteJpaRepository.findById(NOT_FOUND_ID)).thenReturn(Optional.empty());
 
         //Act
         //Assert
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> clienteUseCase.buscar(notFoundId));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> clienteUseCase.buscar(NOT_FOUND_ID));
         assertEquals(message, exception.getMessage());
     }
 }

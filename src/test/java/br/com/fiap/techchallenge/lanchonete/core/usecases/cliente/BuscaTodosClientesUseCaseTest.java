@@ -7,6 +7,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,8 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -38,7 +38,7 @@ public class BuscaTodosClientesUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new BuscaTodosClientesUseCase(clienteRepository);
 
-        clienteDTO = new ClienteDTO("cliente1", "000.000.000-07", "cliente1@email.com");
+        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
     }
 
     @AfterEach
@@ -47,7 +47,8 @@ public class BuscaTodosClientesUseCaseTest {
     }
 
     @Test
-    void shouldFindClientes_WhenBuscarTodosMethodIsCalled() {
+    @DisplayName("Deve buscar todos os clientes")
+    void deveBuscarTodosOsClientes_QuandoOMetodoBuscarTodosForInvocado() {
         //Arrange
         List<Cliente> clientesRetornados = Collections.singletonList(new Cliente());
         List<ClienteDTO> clientesDTO = Collections.singletonList(clienteDTO);
