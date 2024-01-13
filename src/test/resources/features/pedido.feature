@@ -46,7 +46,8 @@ Funcionalidade: Pedido
     Então os pedidos devem ser exibidos com sucesso
 
   @ignore
-  Cenário: Buscar cobrança pelo id do pedido
+  Cenário: Buscar uma cobrança por pedido
     Dado que um pedido já está cadastrado
-    Quando realizar a busca da cobrança pelo id do pedido
-    Então o pedido deve ser exibido com sucesso
+    E que uma cobrança já está cadastrada
+    Quando realizar a busca da cobrança
+    Então a cobrança deve ser exibida com sucesso

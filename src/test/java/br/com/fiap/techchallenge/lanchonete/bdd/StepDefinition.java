@@ -1,11 +1,11 @@
 package br.com.fiap.techchallenge.lanchonete.bdd;
 
-import br.com.fiap.techchallenge.lanchonete.ClienteTestBase;
-import br.com.fiap.techchallenge.lanchonete.PedidoTestBase;
-import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
+import br.com.fiap.techchallenge.lanchonete.*;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ClienteResponse;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.CobrancaResponse;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.PedidoResponse;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ProdutoResponse;
+import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusCobrancaEnum;
 import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusPedidoEnum;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
@@ -28,6 +28,7 @@ public class StepDefinition {
     private ProdutoResponse produtoResponse;
     private ClienteResponse clienteResponse;
     private PedidoResponse pedidoResponse;
+    private CobrancaResponse cobrancaResponse;
 
     @Quando("preencher todos os dados para cadastro do produto")
     public ProdutoResponse preencherTodosDadosParaCadastrarProduto() {
@@ -343,6 +344,92 @@ public class StepDefinition {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("/pedidos/fila-producao");
+    }
+
+    @Quando("preencher todos os dados para cadastro da cobrança")
+    public CobrancaResponse preencherTodosDadosParaCadastrarCobranca() {
+        var produtoRequest = CobrancaTestBase.criarCobrancaRequest(pedidoResponse.getId());
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(produtoRequest)
+                .when()
+                .post("/cobrancas");
+        return response.then()
+                .extract()
+                .as(CobrancaResponse.class);
+    }
+
+    @Então("a cobrança deve ser criada com sucesso")
+    public void cobrancaDeveSerCriadaComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Então("deve exibir a cobrança cadastrada")
+    public void deveExibirCobrancaCadastrada() {
+        response.then()
+                .body(matchesJsonSchemaInClasspath("./schemas/CobrancaResponseSchema.json"));
+    }
+
+    @Dado("que uma cobrança já está cadastrada")
+    public void cobrancaJaCadastrada() {
+        cobrancaResponse = preencherTodosDadosParaCadastrarCobranca();
+    }
+
+    @Quando("realizar a busca da cobrança")
+    public void realizarBuscaCobranca() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/cobrancas/{id}", cobrancaResponse.getId());
+    }
+
+    @Então("a cobrança deve ser exibida com sucesso")
+    public void cobrancaDeveSerExibidaComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value())
+                .body(matchesJsonSchemaInClasspath("./schemas/CobrancaResponseSchema.json"));
+    }
+
+    @Quando("realizar a requisição para alterar a cobrança")
+    public void realizarRequisicaoParaAlterarCobranca() {
+        var atualizaStatusCobrancaRequest = AtualizaStatusCobrancaTestBase
+                .criarAtualizaStatusCobrancaRequest(StatusCobrancaEnum.PAGO);
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(atualizaStatusCobrancaRequest)
+                .when()
+                .post("/cobrancas/{id}/status", cobrancaResponse.getId());
+    }
+
+    @Então("a cobrança deve ser alterada com sucesso")
+    public void cobrancaDeveSerAlteradaComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Então("deve exibir a cobrança alterada")
+    public void deveExibirCobrancaAlterada() {
+        response.then()
+                .body(matchesJsonSchemaInClasspath("./schemas/CobrancaResponseSchema.json"))
+                .body("status", equalTo(StatusCobrancaEnum.PAGO.name()));
+    }
+
+    @Quando("realizar a requisição para criar a cobrança no Mercado Pago")
+    public void realizarRequisicaoParaAlterarCobrancaMercadoPago() {
+        var webhookStatusCobrancaRequest = WebhookStatusCobrancaTestBase
+                .criarWebhookStatusCobrancaRequest("approved", 1L);
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(webhookStatusCobrancaRequest)
+                .when()
+                .post("/cobrancas/{id}/webhook-status", cobrancaResponse.getId());
+    }
+
+    @Então("a cobrança deve ser exibida com resposta vazia")
+    public void cobrancaDeveSerExibidaComRespostaVazia() {
+        response.then()
+                .body(is(emptyString()));
     }
 
 }
