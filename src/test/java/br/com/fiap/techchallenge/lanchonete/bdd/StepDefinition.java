@@ -1,6 +1,8 @@
 package br.com.fiap.techchallenge.lanchonete.bdd;
 
+import br.com.fiap.techchallenge.lanchonete.ClienteTestBase;
 import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ClienteResponse;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ProdutoResponse;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
@@ -21,6 +23,7 @@ public class StepDefinition {
 
     private Response response;
     private ProdutoResponse produtoResponse;
+    private ClienteResponse clienteResponse;
 
     @Quando("preencher todos os dados para cadastro do produto")
     public ProdutoResponse preencherTodosDadosParaCadastrarProduto() {
@@ -153,6 +156,90 @@ public class StepDefinition {
     public void imagemProdutoDeveSerAlteradaComSucesso() {
         response.then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Quando("preencher todos os dados para cadastro do cliente")
+    public ClienteResponse preencherTodosDadosParaCadastrarCliente() {
+        var clienteRequest = ClienteTestBase.criarClienteRequest();
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(clienteRequest)
+                .when()
+                .post("/clientes");
+        return response.then()
+                .extract()
+                .as(ClienteResponse.class);
+    }
+
+    @Então("o cliente deve ser criado com sucesso")
+    public void clienteDeveSerCriadoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Então("deve exibir o cliente cadastrado")
+    public void deveExibirClienteCadastrado() {
+        response.then()
+                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"));
+    }
+
+    @Dado("que um cliente já está cadastrado")
+    public void clienteJaCadastrado() {
+        clienteResponse = preencherTodosDadosParaCadastrarCliente();
+    }
+
+    @Quando("realizar a requisição para alterar o cliente")
+    public void realizarRequisicaoParaAlterarCliente() {
+        clienteResponse.setNome("Cliente Teste Alterado");
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(clienteResponse)
+                .when()
+                .put("/clientes/{id}", clienteResponse.getId());
+    }
+
+    @Então("o cliente deve ser alterado com sucesso")
+    public void clienteDeveSerAlteradoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Então("deve exibir o cliente alterado")
+    public void deveExibirClienteAlterado() {
+        response.then()
+                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"))
+                .body("nome", equalTo(clienteResponse.getNome()));
+    }
+
+    @Quando("requisitar a lista de todos os clientes")
+    public void requisitarListaTodosClientes() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/clientes");
+    }
+
+    @Então("os clientes devem ser exibidos com sucesso")
+    public void clientesDevemSerExibidosComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value())
+                .body("$", hasSize(greaterThanOrEqualTo(1)))
+                .body("$", everyItem(anything()));
+    }
+
+    @Quando("realizar a busca do cliente")
+    public void realizarBuscaCliente() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/clientes/{cpf}", clienteResponse.getCpf());
+    }
+
+    @Então("o cliente deve ser exibido com sucesso")
+    public void clienteDeveSerExibidoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value())
+                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"));
     }
 
 }
