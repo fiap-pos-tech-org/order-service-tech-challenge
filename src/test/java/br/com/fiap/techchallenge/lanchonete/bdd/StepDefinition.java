@@ -1,9 +1,12 @@
 package br.com.fiap.techchallenge.lanchonete.bdd;
 
 import br.com.fiap.techchallenge.lanchonete.ClienteTestBase;
+import br.com.fiap.techchallenge.lanchonete.PedidoTestBase;
 import br.com.fiap.techchallenge.lanchonete.ProdutoTestBase;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ClienteResponse;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.PedidoResponse;
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ProdutoResponse;
+import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusPedidoEnum;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
@@ -24,6 +27,7 @@ public class StepDefinition {
     private Response response;
     private ProdutoResponse produtoResponse;
     private ClienteResponse clienteResponse;
+    private PedidoResponse pedidoResponse;
 
     @Quando("preencher todos os dados para cadastro do produto")
     public ProdutoResponse preencherTodosDadosParaCadastrarProduto() {
@@ -240,6 +244,105 @@ public class StepDefinition {
         response.then()
                 .statusCode(HttpStatus.OK.value())
                 .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"));
+    }
+
+    @Quando("preencher todos os dados para cadastro do pedido")
+    public PedidoResponse preencherTodosDadosParaCadastrarPedido() {
+        var pedidoRequest = PedidoTestBase.criarPedidoRequest(clienteResponse.getId(), produtoResponse.getId());
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(pedidoRequest)
+                .when()
+                .post("/pedidos");
+        return response.then()
+                .extract()
+                .as(PedidoResponse.class);
+    }
+
+    @Então("o pedido deve ser criado com sucesso")
+    public void pedidoDeveSerCriadoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Então("deve exibir o pedido cadastrado")
+    public void deveExibirPedidoCadastrado() {
+        response.then()
+                .body(matchesJsonSchemaInClasspath("./schemas/PedidoResponseSchema.json"));
+    }
+
+    @Dado("que um pedido já está cadastrado")
+    public void pedidoJaCadastrado() {
+        pedidoResponse = preencherTodosDadosParaCadastrarPedido();
+    }
+
+    @Quando("realizar a busca do pedido por Id")
+    public void realizarBuscaPedidoPorId() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/pedidos/{id}", pedidoResponse.getId());
+    }
+
+    @Então("o pedido deve ser exibido com sucesso")
+    public void pedidoDeveSerExibidoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value())
+                .body(matchesJsonSchemaInClasspath("./schemas/PedidoResponseSchema.json"));
+    }
+
+    @Quando("realizar a busca do pedido por status")
+    public void realizarBuscaPedidoPorStatus() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/pedidos/status/{status}", pedidoResponse.getStatus().name());
+    }
+
+    @Então("os pedidos devem ser exibidos com sucesso")
+    public void pedidosDevemSerExibidosComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.OK.value())
+                .body("$", hasSize(greaterThanOrEqualTo(1)))
+                .body("$", everyItem(anything()));
+    }
+
+    @Quando("requisitar a lista de todos os pedidos")
+    public void requisitarListaTodosPedidos() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/pedidos");
+    }
+
+    @Quando("realizar a requisição para alterar o pedido")
+    public void realizarRequisicaoParaAlterarPedido() {
+        pedidoResponse.setStatus(StatusPedidoEnum.EM_PREPARACAO);
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(pedidoResponse)
+                .when()
+                .patch("/pedidos/{id}/status", pedidoResponse.getId());
+    }
+
+    @Então("o pedido deve ser alterado com sucesso")
+    public void pedidoDeveSerAlteradoComSucesso() {
+        response.then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body(matchesJsonSchemaInClasspath("./schemas/PedidoResponseSchema.json"));
+    }
+
+    @Dado("que um pedido já está no status em preparação")
+    public void pedidoJaNoStatusEmPreparacao() {
+        realizarRequisicaoParaAlterarPedido();
+    }
+
+    @Quando("realizar a busca do pedido na fila de preparação")
+    public void realizarBuscaPedidoFilaPreparacao() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/pedidos/fila-producao");
     }
 
 }
