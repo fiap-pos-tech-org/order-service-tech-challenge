@@ -21,7 +21,7 @@ public class ClienteTestBase {
 
     private static String gerarEmail() {
         var random = new Random();
-        return String.format("clienteteste%s@gmail.com", random.nextInt(1000));
+        return String.format("clienteteste%s@gmail.com", random.nextInt(100000));
     }
 
     private static String gerarCPF() {

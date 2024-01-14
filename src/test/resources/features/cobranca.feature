@@ -18,13 +18,6 @@ Funcionalidade: Cobrança
     Quando realizar a busca da cobrança
     Então a cobrança deve ser exibida com sucesso
 
-  @ignore
-  Cenário: Buscar uma cobrança por pedido
-    Dado que um pedido já está cadastrado
-    E que uma cobrança já está cadastrada
-    Quando realizar a busca da cobrança
-    Então a cobrança deve ser exibida com sucesso
-
   Cenário: Alterar uma cobrança
     Dado que um cliente já está cadastrado
     E que um produto já está cadastrado

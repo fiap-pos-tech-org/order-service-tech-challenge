@@ -346,6 +346,14 @@ public class StepDefinition {
                 .get("/pedidos/fila-producao");
     }
 
+    @Quando("realizar a busca da cobrança por pedido")
+    public void realizarBuscaCobrancaPorPedido() {
+        response = given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/pedidos/{id}/cobranca", pedidoResponse.getId());
+    }
+
     @Quando("preencher todos os dados para cadastro da cobrança")
     public CobrancaResponse preencherTodosDadosParaCadastrarCobranca() {
         var produtoRequest = CobrancaTestBase.criarCobrancaRequest(pedidoResponse.getId());

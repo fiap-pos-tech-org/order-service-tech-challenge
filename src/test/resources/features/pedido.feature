@@ -45,9 +45,10 @@ Funcionalidade: Pedido
     Quando realizar a busca do pedido na fila de preparação
     Então os pedidos devem ser exibidos com sucesso
 
-  @ignore
   Cenário: Buscar uma cobrança por pedido
-    Dado que um pedido já está cadastrado
+    Dado que um cliente já está cadastrado
+    E que um produto já está cadastrado
+    E que um pedido já está cadastrado
     E que uma cobrança já está cadastrada
-    Quando realizar a busca da cobrança
+    Quando realizar a busca da cobrança por pedido
     Então a cobrança deve ser exibida com sucesso
