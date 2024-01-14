@@ -4,6 +4,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.CobrancaReposito
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.jpa.CobrancaJpaRepository;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.CobrancaMapper;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cobranca;
+import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusCobrancaEnum;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.CobrancaDTO;
 import br.com.fiap.techchallenge.lanchonete.utils.CobrancaTesteHelper;
 import org.assertj.core.api.Assertions;
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +52,6 @@ public class BuscaCobrancaPorIdUseCaseTest {
         openMocks.close();
     }
 
-
     @Test
     @DisplayName("Deve buscar uma cobrança pelo id")
     void deveBuscarCobranca_QuandoInformadoUmId() {
@@ -62,7 +63,11 @@ public class BuscaCobrancaPorIdUseCaseTest {
         CobrancaDTO cobranca = cobrancaUseCase.buscarPorId(ID);
 
         //Assert
-        Assertions.assertThat(cobranca).isNotNull();
-//        assertNotNull(cobranca);
+        assertThat(cobranca).isNotNull();
+        assertThat(cobranca).satisfies(c -> {
+            c.id().equals(1L);
+            c.pedidoId().equals(1L);
+            c.status().equals(StatusCobrancaEnum.PAGO);
+        });
     }
 }

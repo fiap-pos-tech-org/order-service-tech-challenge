@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 
 public class CobrancaTesteHelper {
     public static Cobranca criaDefaultCobranca() {
-        return new Cobranca(1L, StatusCobrancaEnum.PAGO, BigDecimal.valueOf(1), "1");
+        return new Cobranca(1L, StatusCobrancaEnum.PAGO, BigDecimal.valueOf(1), "1234");
     }
 
     public static CobrancaDTO criaDefaultCobrancaDTO() {
-        return new CobrancaDTO(1L, 1L, BigDecimal.valueOf(1), StatusCobrancaEnum.PAGO, new QrCode("1"));
+        return new CobrancaDTO(1L, 1L, BigDecimal.valueOf(1), StatusCobrancaEnum.PAGO, new QrCode("1234"));
     }
 
     public static Cobranca criaCopiaCobrancaDTO() {
