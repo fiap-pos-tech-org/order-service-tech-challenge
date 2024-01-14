@@ -2,7 +2,7 @@ package br.com.fiap.techchallenge.lanchonete.config;
 
 import br.com.fiap.techchallenge.lanchonete.adapters.gateways.pagamentos.mercadopago.PagamentoMock;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.AtualizaClienteInputPort;
-import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaClientePorInputPort;
+import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaClientePorIdOuCpfInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaTodosClientesInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.CadastraClienteInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cobranca.*;
@@ -16,7 +16,7 @@ import br.com.fiap.techchallenge.lanchonete.core.ports.out.cobranca.*;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.pedido.*;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.produto.*;
 import br.com.fiap.techchallenge.lanchonete.core.usecases.cliente.AtualizaClienteUseCase;
-import br.com.fiap.techchallenge.lanchonete.core.usecases.cliente.BuscaClientePorIdOuCpfUseCase;
+import br.com.fiap.techchallenge.lanchonete.core.usecases.cliente.BuscaClientePorIdOuCpfIdOuCpfUseCase;
 import br.com.fiap.techchallenge.lanchonete.core.usecases.cliente.BuscaTodosClientesUseCase;
 import br.com.fiap.techchallenge.lanchonete.core.usecases.cliente.CadastraClienteUseCase;
 import br.com.fiap.techchallenge.lanchonete.core.usecases.cobranca.*;
@@ -69,8 +69,8 @@ public class CoreInjectionConfig {
     }
 
     @Bean
-    BuscaClientePorInputPort buscaClientePorCpf(BuscaClienteOutputPort buscaClienteOutputPort) {
-        return new BuscaClientePorIdOuCpfUseCase(buscaClienteOutputPort);
+    BuscaClientePorIdOuCpfInputPort buscaClientePorCpf(BuscaClienteOutputPort buscaClienteOutputPort) {
+        return new BuscaClientePorIdOuCpfIdOuCpfUseCase(buscaClienteOutputPort);
     }
 
     @Bean

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class PedidoRequest{
+public class  PedidoRequest{
 
     private Long clienteId;
     private List<ItemPedidoRequest> itens;

@@ -6,6 +6,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.ClienteM
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.BadRequestException;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
+import br.com.fiap.techchallenge.lanchonete.utils.ClienteTesteHelper;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +40,8 @@ public class CadastraClienteUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new CadastraClienteUseCase(clienteRepository);
 
-        clienteSalvo = ClienteTesteBase.criaDefaultCliente();
-        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
+        clienteSalvo = ClienteTesteHelper.criaDefaultCliente();
+        clienteDTO = ClienteTesteHelper.criaDefaultClienteDTO();
     }
 
     @AfterEach

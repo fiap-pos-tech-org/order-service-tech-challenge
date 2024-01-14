@@ -7,6 +7,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.BadRequestException;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
+import br.com.fiap.techchallenge.lanchonete.utils.ClienteTesteHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,9 +45,9 @@ public class AtualizaClienteUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new AtualizaClienteUseCase(clienteRepository);
 
-        clienteSalvo = ClienteTesteBase.criaDefaultCliente();
-        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
-        clienteAtualizado = ClienteTesteBase.criaCopiaClienteDTO();
+        clienteSalvo = ClienteTesteHelper.criaDefaultCliente();
+        clienteDTO = ClienteTesteHelper.criaDefaultClienteDTO();
+        clienteAtualizado = ClienteTesteHelper.criaCopiaClienteDTO();
     }
 
     @AfterEach

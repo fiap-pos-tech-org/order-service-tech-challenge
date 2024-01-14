@@ -6,6 +6,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.ClienteM
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
+import br.com.fiap.techchallenge.lanchonete.utils.ClienteTesteHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,7 @@ public class BuscaClientePorIdOuCpfUseCaseTest {
     private ClienteMapper mapper;
     @InjectMocks
     private ClienteRepository clienteRepository;
-    private BuscaClientePorIdOuCpfUseCase clienteUseCase;
+    private BuscaClientePorIdOuCpfIdOuCpfUseCase clienteUseCase;
     private ClienteDTO clienteDTO;
     private Cliente clienteSalvo;
     private final String CPF = "20000000001";
@@ -40,10 +41,10 @@ public class BuscaClientePorIdOuCpfUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        clienteUseCase = new BuscaClientePorIdOuCpfUseCase(clienteRepository);
+        clienteUseCase = new BuscaClientePorIdOuCpfIdOuCpfUseCase(clienteRepository);
 
-        clienteSalvo = ClienteTesteBase.criaDefaultCliente();
-        clienteDTO = ClienteTesteBase.criaDefaultClienteDTO();
+        clienteSalvo = ClienteTesteHelper.criaDefaultCliente();
+        clienteDTO = ClienteTesteHelper.criaDefaultClienteDTO();
     }
 
     @AfterEach
