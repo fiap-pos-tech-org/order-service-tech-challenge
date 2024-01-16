@@ -1,6 +1,3 @@
-build:
-	mvn compile
-
 unit-test:
 	echo "Executando testes unitários"
 	mvn test
