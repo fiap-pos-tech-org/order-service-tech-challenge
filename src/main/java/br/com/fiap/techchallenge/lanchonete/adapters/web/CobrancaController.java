@@ -33,11 +33,11 @@ public class CobrancaController extends ControllerBase {
     private final BuscaStatusPagamentoInputPort buscaStatusPagamentoInputPort;
 
     public CobrancaController(
-        CriaCobrancaInputPort criaCobrancaInputPort,
-        BuscaCobrancaPorIdInputPort buscaCobrancaPorIdInputPort,
-        AtualizaStatusCobrancaInputPort atualizaStatusCobrancaInputPort,
-        CobrancaMapper cobrancaMapper,
-        BuscaStatusPagamentoInputPort buscaStatusPagamentoInputPort
+            CriaCobrancaInputPort criaCobrancaInputPort,
+            BuscaCobrancaPorIdInputPort buscaCobrancaPorIdInputPort,
+            AtualizaStatusCobrancaInputPort atualizaStatusCobrancaInputPort,
+            CobrancaMapper cobrancaMapper,
+            BuscaStatusPagamentoInputPort buscaStatusPagamentoInputPort
     ) {
         this.criaCobrancaInputPort = criaCobrancaInputPort;
         this.buscaCobrancaPorIdInputPort = buscaCobrancaPorIdInputPort;
@@ -65,7 +65,7 @@ public class CobrancaController extends ControllerBase {
     }
 
     @Operation(summary = "Atualiza o status de uma cobrança para Pago ou Cancelado")
-    @PostMapping(value = "/{id}/status")
+    @PutMapping(value = "/{id}/status")
     ResponseEntity<CobrancaResponse> updateStatus(
             @PathVariable("id") Long id,
             @Valid @RequestBody AtualizaStatusCobrancaRequest atualizaStatusCobrancaRequest
@@ -78,13 +78,13 @@ public class CobrancaController extends ControllerBase {
     @Operation(
             summary = "Atualiza o status de uma cobrança para Pago ou Recusado, baseado na requisição pelo serviço de webhook do MercadoPago"
     )
-    @PostMapping(value = "/{id}/webhook-status")
+    @PutMapping(value = "/{id}/webhook-status")
     ResponseEntity<?> updateWebhookStatus(
             @PathVariable("id") Long id,
             @Valid @RequestBody WebhookStatusCobrancaRequest request
     ) {
 
-        ResponseEntity<Object> response = ResponseEntity.ok().build();
+        ResponseEntity<Object> response = ResponseEntity.noContent().build();
 
         if (request.getAction().contains("created")) {
             logger.info(String.format("Pagamento com id: %s criado\n", id));
