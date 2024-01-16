@@ -50,7 +50,9 @@ jobs:
 
       - name: Run tests
         run: |
+          pwd
           cd ../..
+          pwd
           make docker-build
           make docker-start
           make system-test
