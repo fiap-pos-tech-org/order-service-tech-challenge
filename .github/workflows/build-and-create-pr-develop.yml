@@ -23,17 +23,19 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Wait for SonarQube to be ready
-        run: |
-          pwd
-          docker-compose -f docker-compose-sonar.yml up -d
+        run: docker-compose -f docker-compose-sonar.yml up -d
 
       - name: Generate token
         run: |
           response=$(curl -sSf -X POST \
             -u admin:admin \
             "http://localhost:9000/api/user_tokens/generate" \
-            -d "name=token-name"
+            -d "name=SONAR_TOKEN" \
             -d "type=GLOBAL_ANALYSIS_TOKEN")
+          
+          curl -sSf --request POST \
+          --url 'http://localhost:9000/api/user_tokens/generate?SONAR_TOKEN=teste&type=GLOBAL_ANALYSIS_TOKEN' \
+          --header 'Authorization: Basic YWRtaW46bm92YQ=='
           
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
 
