@@ -43,6 +43,8 @@ jobs:
             echo "Waiting for SonarQube to be ready..."
             sleep 15
           done
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Generate token
         run: |
@@ -53,9 +55,13 @@ jobs:
           echo "Response: $response"
           echo "Token gerado: $(echo "$response" | jq -r '.token')"
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Build and analyze with SonarQube
         run: make sonar-analysis SONARQUBE_URL=$SONARQUBE_URL SONAR_TOKEN=$SONAR_TOKEN
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Check Test Coverage
         run: |
