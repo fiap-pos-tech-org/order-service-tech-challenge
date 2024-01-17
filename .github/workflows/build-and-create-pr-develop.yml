@@ -33,10 +33,11 @@ jobs:
           done
 
       - name: Generate token
-        run: |
-          response=$(curl -sSf -X POST \
-            -u admin:admin \
-            "http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
+        run: |          
+          response=$(curl -sSf--request POST \
+            --url 'http://localhost:9000/api/user_tokens/generate?name=testeq&type=GLOBAL_ANALYSIS_TOKEN' \
+            --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+            --cookie 'JWT-SESSION=eyJhbGciOiJIUzI1NiJ9.eyJsYXN0UmVmcmVzaFRpbWUiOjE3MDU0OTczNTMyNTcsInhzcmZUb2tlbiI6Im5uYWI1NTA4N21oNzluZXVrbXVubWhwcWUzIiwianRpIjoiQVkwWGtGd25icUd0RWJmOXhWVXUiLCJzdWIiOiJBWTBVNWdzUVh2eHlzNExSREg1cyIsImlhdCI6MTcwNTQ5NzM1MywiZXhwIjoxNzA1NzU2NTUzfQ.ZWWaNK-50PXgGKU0f2E-9070VLfuOYCfbsQm3wTR5O8; XSRF-TOKEN=nnab55087mh79neukmunmhpqe3')
           
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
 
