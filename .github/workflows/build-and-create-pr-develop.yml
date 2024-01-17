@@ -27,7 +27,7 @@ jobs:
 
       - name: Wait for SonarQube to be ready
         run: |
-          until curl -sSf "http://sonarqube:9000/api/system/status" >/dev/null; do
+          until curl -sSf "http://localhost:9000/api/system/status" >/dev/null; do
             echo "Waiting for SonarQube to be ready..."
             sleep 5
           done
@@ -36,28 +36,28 @@ jobs:
         run: |
           response=$(curl -sSf -X POST \
             -u admin:admin \
-            "http://sonarqube:9000/api/user_tokens/generate" \
+            "http://localhost:9000/api/user_tokens/generate" \
             -d "name=SONAR_TOKEN" \
             -d "type=GLOBAL_ANALYSIS_TOKEN")
           
           curl -sSf --request POST \
-          --url 'http://sonarqube:9000/api/user_tokens/generate?SONAR_TOKEN=teste&type=GLOBAL_ANALYSIS_TOKEN' \
+          --url 'http://localhost:9000/api/user_tokens/generate?SONAR_TOKEN=teste&type=GLOBAL_ANALYSIS_TOKEN' \
           --header 'Authorization: Basic YWRtaW46bm92YQ=='
           
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
 
       - name: Build and analyze with SonarQube
-        run: mvn clean verify sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN
+        run: mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=$SONAR_TOKEN
 
       - name: Check Test Coverage
         run: |
-          COVERAGE=$(curl -s http://sonarqube:9000/api/qualitygates/project_status?projectKey=lanchonete | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
+          COVERAGE=$(curl -s http://localhost:9000/api/qualitygates/project_status?projectKey=lanchonete | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
           if [[ "$COVERAGE" == "ERROR" ]]; then
             echo "Cobertura de teste abaixo de 80%."
             exit 1
           fi
         env:
-          SONARQUBE_URL: 'http://sonarqube:9000'
+          SONARQUBE_URL: 'http://localhost:9000'
 
       - name: Stop SonarQube
         run: docker-compose -f docker-compose-sonar.yml down
