@@ -50,7 +50,7 @@ jobs:
         run: |
           response=$(curl -X POST \
             -u admin:admin \
-            "$SONARQUBE_URL/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
+            "${{ env.SONARQUBE_URL }}/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
           
           echo "Response: $response"
           echo "Token gerado: $(echo "$response" | jq -r '.token')"
