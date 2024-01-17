@@ -49,9 +49,8 @@ jobs:
       - name: Generate token
         run: |
           response=$(curl --request POST \
-            --url 'http://localhost:9000/api/user_tokens/generate' \
-            --header 'Authorization: Basic YWRtaW46YWRtaW4=' \
-            --data 'name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN')
+            --url 'http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN' \
+            --header 'Authorization: Basic YWRtaW46YWRtaW4=')
           
           echo "Response: $response"
           echo "Token gerado: $(echo "$response" | jq -r '.token')"
