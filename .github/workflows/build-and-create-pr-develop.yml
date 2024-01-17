@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate token
         run: |
-          response=$(curl -sSf -X POST \
+          response=$(curl -X POST \
             -u admin:admin \
             "http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
           
