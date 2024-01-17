@@ -36,13 +36,7 @@ jobs:
         run: |
           response=$(curl -sSf -X POST \
             -u admin:admin \
-            "http://localhost:9000/api/user_tokens/generate" \
-            -d "name=SONAR_TOKEN" \
-            -d "type=GLOBAL_ANALYSIS_TOKEN")
-          
-          curl -sSf --request POST \
-          --url 'http://localhost:9000/api/user_tokens/generate?SONAR_TOKEN=teste&type=GLOBAL_ANALYSIS_TOKEN' \
-          --header 'Authorization: Basic YWRtaW46bm92YQ=='
+            "http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
           
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
 
