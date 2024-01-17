@@ -15,6 +15,44 @@ jobs:
   build:
     uses: ./.github/workflows/reusable-workflow-build.yml
 
+  sonarqube-analysis:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Wait for SonarQube to be ready
+        run: |
+          pwd
+          docker-compose -f docker-compose-sonar.yml up -d
+
+      - name: Generate token
+        run: |
+          response=$(curl -sSf -X POST \
+            -u admin:admin \
+            "http://localhost:9000/api/user_tokens/generate" \
+            -d "name=token-name"
+            -d "type=GLOBAL_ANALYSIS_TOKEN")
+          
+          echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
+
+      - name: Build and analyze with SonarQube
+        run: mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=$SONAR_TOKEN
+
+      - name: Check Test Coverage
+        run: |
+          COVERAGE=$(curl -s http://localhost:9000/api/qualitygates/project_status?projectKey=lanchonete | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
+          if [[ "$COVERAGE" == "ERROR" ]]; then
+            echo "Cobertura de teste abaixo de 80%."
+            exit 1
+          fi
+        env:
+          SONARQUBE_URL: 'http://localhost:9000'
+
+      - name: Stop SonarQube containers
+        run: docker-compose -f docker-compose-sonar.yml down
+
   create_pull_request:
     name: Create Pull Request to Develop
     runs-on: ubuntu-latest
