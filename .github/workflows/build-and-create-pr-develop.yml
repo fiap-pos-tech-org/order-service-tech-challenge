@@ -11,6 +11,10 @@ on:
       - 'test**'
       - 'chore**'
 
+env:
+  SONARQUBE_URL: 'http://localhost:9000'
+  PROJECT_KEY: 'lanchonete'
+
 jobs:
   build:
     uses: ./.github/workflows/reusable-workflow-build.yml
@@ -29,11 +33,13 @@ jobs:
           distribution: 'temurin'
 
       - name: Start SonarQube
-        run: docker-compose -f docker-compose-sonar.yml up -d
+        run: |
+          make docker-build
+          make docker-start
 
       - name: Wait for SonarQube to be ready
         run: |
-          until curl -sSf "http://localhost:9000/api/system/status" >/dev/null; do
+          until curl -sSf "$SONARQUBE_URL/api/system/status" >/dev/null; do
             echo "Waiting for SonarQube to be ready..."
             sleep 15
           done
@@ -42,25 +48,25 @@ jobs:
         run: |
           response=$(curl -X POST \
             -u admin:admin \
-            "http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
+            "$SONARQUBE_URL/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN")
           
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
 
       - name: Build and analyze with SonarQube
-        run: mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=$SONAR_TOKEN
+        run: make sonar-analysis SONARQUBE_URL=$SONARQUBE_URL SONAR_TOKEN=$SONAR_TOKEN
 
       - name: Check Test Coverage
         run: |
-          COVERAGE=$(curl -s http://localhost:9000/api/qualitygates/project_status?projectKey=lanchonete | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
+          COVERAGE=$(curl -s $SONARQUBE_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
           if [[ "$COVERAGE" == "ERROR" ]]; then
-            echo "Cobertura de teste abaixo de 80%."
+            echo "Cobertura de teste abaixo de 80%"
             exit 1
           fi
         env:
-          SONARQUBE_URL: 'http://localhost:9000'
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Stop SonarQube
-        run: docker-compose -f docker-compose-sonar.yml down
+        run: make docker-stop
 
   create_pull_request:
     name: Create Pull Request to Develop
