@@ -48,7 +48,7 @@ jobs:
 
       - name: Generate token
         run: |
-          response=$(curl --request POST \
+          response=$(curl --request GET \
             --url 'https://jsonplaceholder.typicode.com/users/1')
           
           echo "Response: $response"
