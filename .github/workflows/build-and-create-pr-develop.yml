@@ -52,7 +52,7 @@ jobs:
             --url 'https://jsonplaceholder.typicode.com/users/1')
           
           echo "Response: $response"
-          echo "Token gerado: $(echo "$response" | jq -r '.token')"
+          echo "Token gerado: $(echo "$response" | jq -r '.name')"
           echo "SONAR_TOKEN=$(echo "$response" | jq -r '.name')" >> $GITHUB_ENV
         env:
           SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
