@@ -49,7 +49,7 @@ jobs:
       - name: Generate token
         run: |
           curl -sSf "$SONARQUBE_URL/api/system/status"
-          curl -sSf "http://localhost:9000/api/system/status"
+          curl --request GET "$SONARQUBE_URL/api/system/status"
           
           curl --request POST \
           --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
