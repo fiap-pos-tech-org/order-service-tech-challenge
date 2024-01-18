@@ -48,12 +48,17 @@ jobs:
 
       - name: Generate token
         run: |
-          response=$(curl --request GET \
-            --url 'https://jsonplaceholder.typicode.com/users/1')
+          curl --request POST \
+          --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
+          --header 'Authorization: Basic YWRtaW46YWRtaW4='
+          
+          response=$(curl --request POST \
+            --url 'http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN' \
+            --header 'Authorization: Basic YWRtaW46YWRtaW4=')
           
           echo "Response: $response"
-          echo "Token gerado: $(echo "$response" | jq -r '.name')"
-          echo "SONAR_TOKEN=$(echo "$response" | jq -r '.name')" >> $GITHUB_ENV
+          echo "Token gerado: $(echo "$response" | jq -r '.token')"
+          echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
         env:
           SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
