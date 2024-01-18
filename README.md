@@ -42,7 +42,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
     ```
 3. Execute o comando para buildar o projeto: 
     ```bash
-        ./mvnw clean package -DskipTests
+        ./mvnw clean package
     ```
 4. Execute o comando para iniciar o ambiente Docker: 
     ```bash
@@ -67,6 +67,25 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
     - Se você estiver utilizando o minikube obetenha a url da aplição através do comando:
     ```bash 
         minikube service lanchonete-service --url
+    ```
+
+### Para rodar os testes do projeto execute os comandos abaixo:
+
+1. Testes unitários:
+    ```bash
+        mvn test
+    ```
+2. Testes integrados:
+    ```bash
+        mvn test -P integration-test
+    ```
+3. Testes de sistema:
+    ```bash
+        mvn test -P system-test
+    ```
+4. Testes de sistema filtrando por tags:
+    ```bash
+        mvn test -P system-test -Dcucumber.filter.tags="@smoke"
     ```
 
 ## Contribuidores
