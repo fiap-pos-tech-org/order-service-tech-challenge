@@ -48,13 +48,16 @@ jobs:
 
       - name: Generate token
         run: |
-          response=$(curl --request POST \
-          --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
-          --header 'Authorization: Basic YWRtaW46YWRtaW4=')
+          curl -sSf "$SONARQUBE_URL/api/system/status"
+          curl -sSf "http://localhost:9000/api/system/status"
           
           curl --request POST \
+          --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
+          --header 'Authorization: Basic YWRtaW46YWRtaW4='
+          
+          response=$(curl --request POST \
             --url 'http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN' \
-            --header 'Authorization: Basic YWRtaW46YWRtaW4='
+            --header 'Authorization: Basic YWRtaW46YWRtaW4=')
           
           echo "Response: $response"
           echo "Token gerado: $(echo "$response" | jq -r '.token')"
