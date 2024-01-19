@@ -11,8 +11,7 @@ import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.AtualizaClient
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaClientePorIdOuCpfInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaTodosClientesInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.CadastraClienteInputPort;
-import br.com.fiap.techchallenge.lanchonete.utils.ClienteTesteHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.fiap.techchallenge.lanchonete.utils.ClienteHelper;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -55,9 +54,9 @@ public class ClienteControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(clienteController).setControllerAdvice(new ExceptionsHandler()).build();
 
-        clienteDTO = ClienteTesteHelper.criaDefaultClienteDTO();
-        clienteResponse = ClienteTesteHelper.criaDefaultClienteResponse();
-        clienteRequest = ClienteTesteHelper.criaDefaultClienteRequest();
+        clienteDTO = ClienteHelper.criaClienteDTO();
+        clienteResponse = ClienteHelper.criaClienteResponse();
+        clienteRequest = ClienteHelper.criaClienteRequest();
     }
 
     @AfterEach
@@ -131,7 +130,7 @@ public class ClienteControllerTest {
             mockMvc.perform(
                             post("/clientes")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(ClienteTesteHelper.converteParaJson(clienteRequest)))
+                                    .content(ClienteHelper.converteParaJson(clienteRequest)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));
@@ -156,7 +155,7 @@ public class ClienteControllerTest {
             mockMvc.perform(
                             put("/clientes/{id}", 1)
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(ClienteTesteHelper.converteParaJson(clienteRequest)))
+                                    .content(ClienteHelper.converteParaJson(clienteRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));

@@ -7,18 +7,18 @@ import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ClienteTesteHelper {
+public class ClienteHelper {
 
-    public static ClienteDTO criaDefaultClienteDTO() {
-        return new ClienteDTO("cliente1", "56312729036", "cliente1@email.com");
+    public static ClienteDTO criaClienteDTO() {
+        return new ClienteDTO(1L, "cliente1", "56312729036", "cliente1@email.com");
     }
 
-    public static Cliente criaDefaultCliente() {
+    public static Cliente criaCliente() {
         return new Cliente("cliente", "80313100098", "cliente@email.com");
     }
 
     public static Cliente criaCopiaClienteDTO() {
-        ClienteDTO clienteDTO = criaDefaultClienteDTO();
+        ClienteDTO clienteDTO = criaClienteDTO();
         return new Cliente(
                 clienteDTO.nome(),
                 clienteDTO.cpf(),
@@ -26,11 +26,11 @@ public class ClienteTesteHelper {
         );
     }
 
-    public static ClienteResponse criaDefaultClienteResponse() {
+    public static ClienteResponse criaClienteResponse() {
         return new ClienteResponse(1L, "cliente1", "56312729036", "cliente1@email.com");
     }
 
-    public static ClienteRequest criaDefaultClienteRequest() {
+    public static ClienteRequest criaClienteRequest() {
         return new ClienteRequest("cliente1", "56312729036", "cliente1@email.com");
     }
 

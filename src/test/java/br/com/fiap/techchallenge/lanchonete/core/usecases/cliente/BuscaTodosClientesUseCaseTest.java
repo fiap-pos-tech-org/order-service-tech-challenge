@@ -5,7 +5,7 @@ import br.com.fiap.techchallenge.lanchonete.adapters.repository.jpa.ClienteJpaRe
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.ClienteMapper;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
-import br.com.fiap.techchallenge.lanchonete.utils.ClienteTesteHelper;
+import br.com.fiap.techchallenge.lanchonete.utils.ClienteHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ public class BuscaTodosClientesUseCaseTest {
         openMocks = MockitoAnnotations.openMocks(this);
         clienteUseCase = new BuscaTodosClientesUseCase(clienteRepository);
 
-        clienteDTO = ClienteTesteHelper.criaDefaultClienteDTO();
+        clienteDTO = ClienteHelper.criaClienteDTO();
     }
 
     @AfterEach

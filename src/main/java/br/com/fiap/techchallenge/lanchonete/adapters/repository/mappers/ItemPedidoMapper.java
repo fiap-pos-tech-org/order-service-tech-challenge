@@ -13,13 +13,16 @@ import java.util.List;
 @Component
 public class ItemPedidoMapper {
 
-    private final ProdutoJpaRepository produtoJpaRepository;
+    private ProdutoJpaRepository produtoJpaRepository;
+
+    public ItemPedidoMapper() {
+    }
 
     public ItemPedidoMapper(ProdutoJpaRepository produtoJpaRepository) {
         this.produtoJpaRepository = produtoJpaRepository;
     }
 
-    public List<ItemPedido> toItemPedido(Pedido pedido, List<ItemPedidoDTO> criaItemPedido){
+    public List<ItemPedido> toItemPedido(Pedido pedido, List<ItemPedidoDTO> criaItemPedido) {
 
         var listaItemPedido = new ArrayList<ItemPedido>();
 
@@ -33,10 +36,10 @@ public class ItemPedidoMapper {
         return listaItemPedido;
     }
 
-    public List<ItemPedidoDTO> toItemPedidoResponse(List<ItemPedido> itens){
+    public List<ItemPedidoDTO> toItemPedidoResponse(List<ItemPedido> itens) {
         var listaItemPedidoOut = new ArrayList<ItemPedidoDTO>();
 
-        itens.forEach( item -> {
+        itens.forEach(item -> {
             var itemPedidoOut = new ItemPedidoDTO(
                     item.getProduto().getId(),
                     item.getProduto().getNome(),
