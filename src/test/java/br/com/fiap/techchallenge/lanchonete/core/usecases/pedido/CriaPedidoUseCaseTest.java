@@ -16,6 +16,7 @@ import br.com.fiap.techchallenge.lanchonete.utils.PedidoHelper;
 import br.com.fiap.techchallenge.lanchonete.utils.ProdutoHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -59,6 +60,7 @@ public class CriaPedidoUseCaseTest {
     }
 
     @Test
+    @DisplayName("Deve criar pedido quando todos os atributos forem informados corretamente")
     void deveCriarPedido_QuandoTodosOsAtributosForemInformadosCorretamente() {
         //Arrange
         when(clienteJpaRepository.findById(anyLong())).thenReturn(Optional.of(ClienteHelper.criaCliente()));

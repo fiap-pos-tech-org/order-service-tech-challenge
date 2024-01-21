@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 public class ClienteControllerTest {
 
     private MockMvc mockMvc;
@@ -50,8 +49,13 @@ public class ClienteControllerTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        ClienteController clienteController = new ClienteController(atualizaClienteInputPort, buscaClientePorIdOuCpfInputPort, buscaTodosClientesInputPort, cadastraClienteInputPort, mapperWeb);
-
+        ClienteController clienteController = new ClienteController(
+                atualizaClienteInputPort,
+                buscaClientePorIdOuCpfInputPort,
+                buscaTodosClientesInputPort,
+                cadastraClienteInputPort,
+                mapperWeb
+        );
         mockMvc = MockMvcBuilders.standaloneSetup(clienteController).setControllerAdvice(new ExceptionsHandler()).build();
 
         clienteDTO = ClienteHelper.criaClienteDTO();
@@ -77,7 +81,10 @@ public class ClienteControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(get("/clientes/{cpf}", "56312729036")).andExpect(status().isOk()).andExpect(jsonPath("$.cpf").value("56312729036")).andExpect(jsonPath("$.email").value("cliente1@email.com"));
+            mockMvc.perform(get("/clientes/{cpf}", "56312729036"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.cpf").value("56312729036"))
+                    .andExpect(jsonPath("$.email").value("cliente1@email.com"));
             verify(buscaClientePorIdOuCpfInputPort, times(1)).buscar(anyString());
         }
 
@@ -89,7 +96,8 @@ public class ClienteControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(get("/clientes/{cpf}", "10000000007")).andExpect(status().isNotFound());
+            mockMvc.perform(get("/clientes/{cpf}", "10000000007"))
+                    .andExpect(status().isNotFound());
             verify(buscaClientePorIdOuCpfInputPort, times(1)).buscar(anyString());
         }
     }
@@ -102,14 +110,17 @@ public class ClienteControllerTest {
         @DisplayName("Deve retornar uma lista de clientes")
         void deveRetornarUmaListaDeClientes() throws Exception {
             //Arrange
-            List<ClienteDTO> listaClientes = Arrays.asList(clienteDTO);
-            List<ClienteResponse> listaClientesResponse = Arrays.asList(clienteResponse);
+            List<ClienteDTO> listaClientes = List.of(clienteDTO);
+            List<ClienteResponse> listaClientesResponse = List.of(clienteResponse);
             when(buscaTodosClientesInputPort.buscarTodos()).thenReturn(listaClientes);
             when(mapperWeb.toClientesResponse(anyList())).thenReturn(listaClientesResponse);
 
             //Act
             //Assert
-            mockMvc.perform(get("/clientes")).andExpect(status().isOk()).andExpect(jsonPath("$[0].cpf").value("56312729036")).andExpect(jsonPath("$[0].email").value("cliente1@email.com"));
+            mockMvc.perform(get("/clientes"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$[0].cpf").value("56312729036"))
+                    .andExpect(jsonPath("$[0].email").value("cliente1@email.com"));
 
         }
     }
@@ -127,10 +138,9 @@ public class ClienteControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(
-                            post("/clientes")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(ClienteHelper.converteParaJson(clienteRequest)))
+            mockMvc.perform(post("/clientes")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(ClienteHelper.converteParaJson(clienteRequest)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));
@@ -152,10 +162,9 @@ public class ClienteControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(
-                            put("/clientes/{id}", 1)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(ClienteHelper.converteParaJson(clienteRequest)))
+            mockMvc.perform(put("/clientes/{id}", 1)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(ClienteHelper.converteParaJson(clienteRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));

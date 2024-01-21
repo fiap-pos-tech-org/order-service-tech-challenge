@@ -34,7 +34,7 @@ public class ClienteHelper {
         return new ClienteRequest("cliente1", "56312729036", "cliente1@email.com");
     }
 
-    public static String converteParaJson(Object o) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(o);
+    public static String converteParaJson(ClienteRequest clienteRequest) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(clienteRequest);
     }
 }
