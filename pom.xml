@@ -27,6 +27,9 @@
 		<allure.version>2.23.0</allure.version>
 		<allure.report.version>2.4.1</allure.report.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+		<sonar.version>3.4.0.905</sonar.version>
+		<sonar.projectKey>${project.artifactId}</sonar.projectKey>
+		<sonar.projectName>${project.name}</sonar.projectName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -205,6 +208,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>${sonar.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<profiles>

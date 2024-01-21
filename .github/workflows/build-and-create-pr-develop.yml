@@ -11,9 +11,77 @@ on:
       - 'test**'
       - 'chore**'
 
+env:
+  SONARQUBE_URL: 'http://localhost:9000'
+  PROJECT_KEY: 'lanchonete'
+
 jobs:
   build:
     uses: ./.github/workflows/reusable-workflow-build.yml
+
+  sonarqube-analysis:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Start SonarQube
+        run: |
+          make docker-build
+          make docker-start
+
+      - name: Wait for SonarQube to be ready
+        run: |
+          until curl -sSf "$SONARQUBE_URL/api/system/status" >/dev/null; do
+            echo "Waiting for SonarQube to be ready..."
+            sleep 15
+          done
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
+
+      - name: Generate token
+        run: |
+          curl -sSf "$SONARQUBE_URL/api/system/status"
+          curl --request GET "$SONARQUBE_URL/api/system/status"
+          
+          curl --request POST \
+          --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
+          --header 'Authorization: Basic YWRtaW46YWRtaW4='
+          
+          response=$(curl --request POST \
+            --url 'http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN' \
+            --header 'Authorization: Basic YWRtaW46YWRtaW4=')
+          
+          echo "Response: $response"
+          echo "Token gerado: $(echo "$response" | jq -r '.token')"
+          echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
+
+      - name: Build and analyze with SonarQube
+        run: make sonar-analysis SONARQUBE_URL=$SONARQUBE_URL SONAR_TOKEN=$SONAR_TOKEN
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
+
+      - name: Check Test Coverage
+        run: |
+          COVERAGE=$(curl -s $SONARQUBE_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY | jq -r '.projectStatus.conditions[] | select(.metric == "coverage").status')
+          if [[ "$COVERAGE" == "ERROR" ]]; then
+            echo "Cobertura de teste abaixo de 80%"
+            exit 1
+          fi
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
+
+      - name: Stop SonarQube
+        run: make docker-stop
 
   create_pull_request:
     name: Create Pull Request to Develop
