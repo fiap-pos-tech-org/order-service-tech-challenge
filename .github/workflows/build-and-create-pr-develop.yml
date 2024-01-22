@@ -74,10 +74,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Start SonarQube
-        run: |
+#        run: |
 #          make docker-build
 #          make docker-start
-          docker compose -f docker-compose-sonar.yml up -d
+        run: docker compose -f docker-compose-sonar.yml up -d
 
       - name: Wait for SonarQube to be ready
         run: |
