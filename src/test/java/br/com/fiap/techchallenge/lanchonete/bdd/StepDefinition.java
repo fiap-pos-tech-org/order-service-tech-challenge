@@ -407,7 +407,7 @@ public class StepDefinition {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(atualizaStatusCobrancaRequest)
                 .when()
-                .post("/cobrancas/{id}/status", cobrancaResponse.getId());
+                .put("/cobrancas/{id}/status", cobrancaResponse.getId());
     }
 
     @Então("a cobrança deve ser alterada com sucesso")
@@ -423,7 +423,7 @@ public class StepDefinition {
                 .body("status", equalTo(StatusCobrancaEnum.PAGO.name()));
     }
 
-    @Quando("realizar a requisição para criar a cobrança no Mercado Pago")
+    @Quando("realizar a requisição para alterar a cobrança no Mercado Pago")
     public void realizarRequisicaoParaAlterarCobrancaMercadoPago() {
         var webhookStatusCobrancaRequest = WebhookStatusCobrancaTestBase
                 .criarWebhookStatusCobrancaRequest("approved", 1L);
@@ -431,7 +431,13 @@ public class StepDefinition {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(webhookStatusCobrancaRequest)
                 .when()
-                .post("/cobrancas/{id}/webhook-status", cobrancaResponse.getId());
+                .put("/cobrancas/{id}/webhook-status", cobrancaResponse.getId());
+    }
+
+    @Então("a cobrança deve ser alterada com sucesso no Mercado Pago")
+    public void cobrancaDeveSerAlteradaComSucessoMercadoPago() {
+        response.then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Então("a cobrança deve ser exibida com resposta vazia")
