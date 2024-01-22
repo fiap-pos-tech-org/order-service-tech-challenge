@@ -74,10 +74,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Start SonarQube
-#        run: |
-#          make docker-build
-#          make docker-start
-        run: docker compose -f docker-compose-sonar.yml up -d
+        run: make docker-start-sonar
 
       - name: Wait for SonarQube to be ready
         run: |
@@ -88,30 +85,10 @@ jobs:
         env:
           SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
-#      - name: Generate token
-#        run: |
-#          curl -sSf "$SONARQUBE_URL/api/system/status"
-#          curl --request GET "$SONARQUBE_URL/api/system/status"
-#
-#          curl --request POST \
-#          --url 'http://localhost:9000/api/users/change_password?login=admin&previousPassword=admin&password=sonar' \
-#          --header 'Authorization: Basic YWRtaW46YWRtaW4='
-#
-#          response=$(curl --request POST \
-#            --url 'http://localhost:9000/api/user_tokens/generate?name=SONAR_TOKEN&type=GLOBAL_ANALYSIS_TOKEN' \
-#            --header 'Authorization: Basic YWRtaW46YWRtaW4=')
-#
-#          echo "Response: $response"
-#          echo "Token gerado: $(echo "$response" | jq -r '.token')"
-#          echo "SONAR_TOKEN=$(echo "$response" | jq -r '.token')" >> $GITHUB_ENV
-#        env:
-#          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
-
       - name: Build and analyze with SonarQube
-#        run: make sonar-analysis SONARQUBE_URL=$SONARQUBE_URL SONAR_TOKEN=$SONAR_TOKEN
-        run: mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin
-#        env:
-#          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
+        run: make sonar-analysis SONARQUBE_URL=$SONARQUBE_URL
+        env:
+          SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Check Test Coverage
         run: |
@@ -124,8 +101,7 @@ jobs:
           SONARQUBE_URL: ${{ env.SONARQUBE_URL }}
 
       - name: Stop SonarQube
-#        run: make docker-stop
-        run: docker compose -f docker-compose-sonar.yml down
+        run: make docker-stop-sonar
 
   create_pull_request:
     name: Create Pull Request to Develop
