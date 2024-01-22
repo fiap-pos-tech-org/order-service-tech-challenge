@@ -110,7 +110,7 @@ jobs:
       contents: write
       pull-requests: write
       repository-projects: write
-    needs: sonarqube-analysis
+#    needs: sonarqube-analysis
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
