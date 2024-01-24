@@ -7,24 +7,23 @@ import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.Atualiz
 import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.CobrancaRequest;
 import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusCobrancaEnum;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoundException;
-import br.com.fiap.techchallenge.lanchonete.core.dtos.CobrancaDTO;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.CriaCobrancaDTO;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cobranca.AtualizaStatusCobrancaInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cobranca.BuscaCobrancaPorIdInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cobranca.BuscaStatusPagamentoInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cobranca.CriaCobrancaInputPort;
 import br.com.fiap.techchallenge.lanchonete.utils.CobrancaHelper;
+import br.com.fiap.techchallenge.lanchonete.utils.ObjectParaJsonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,9 +41,7 @@ public class CobrancaControllerTest {
     private CobrancaMapper cobrancaMapper;
     @Mock
     private BuscaStatusPagamentoInputPort buscaStatusPagamentoInputPort;
-
     private CobrancaController cobrancaController;
-
     private AtualizaStatusCobrancaRequest atualizaStatusCobrancaRequest;
 
     private AutoCloseable openMocks;
@@ -87,7 +84,7 @@ public class CobrancaControllerTest {
             //Assert
             mockMvc.perform(post("/cobrancas")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(CobrancaHelper.converteParaJson(CobrancaHelper.criaCobrancaRequest())))
+                            .content(ObjectParaJsonMapper.converte(CobrancaHelper.criaCobrancaRequest())))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.status").value("PENDENTE"));
 
@@ -101,7 +98,7 @@ public class CobrancaControllerTest {
             //Assert
             mockMvc.perform(post("/cobrancas")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(CobrancaHelper.converteParaJson(new CobrancaRequest(null))))
+                            .content(ObjectParaJsonMapper.converte(new CobrancaRequest(null))))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("O campo pedidoId é obrigatório"));
 
@@ -127,7 +124,7 @@ public class CobrancaControllerTest {
 
         @Test
         @DisplayName("Deve retornar NotFound quando o id do pedido não for encontrado")
-        void deveRetornarNotFound_QuandoIdPedidoNaoEncontrado () throws Exception {
+        void deveRetornarNotFound_QuandoIdPedidoNaoEncontrado() throws Exception {
             //Arrange
             when(buscaCobrancaPorIdInputPort.buscarPorId(any())).thenThrow(EntityNotFoundException.class);
 
@@ -175,7 +172,7 @@ public class CobrancaControllerTest {
 
         @Test
         @DisplayName("Deve retornar NotFound quando o id do pedido não for encontrado")
-        void deveRetornarNotFound_QuandoIdPedidoNaoEncontrado () throws Exception {
+        void deveRetornarNotFound_QuandoIdPedidoNaoEncontrado() throws Exception {
             //Arrange
             when(atualizaStatusCobrancaInputPort.atualizarStatus(anyLong(), any())).thenThrow(EntityNotFoundException.class);
 
@@ -183,9 +180,32 @@ public class CobrancaControllerTest {
             //Assert
             mockMvc.perform(post("/cobrancas/{id}/status", 1)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(CobrancaHelper.converteParaJson(atualizaStatusCobrancaRequest)))
+                            .content(ObjectParaJsonMapper.converte(atualizaStatusCobrancaRequest)))
                     .andExpect(status().isNotFound());
 
+            verify(atualizaStatusCobrancaInputPort, times(1)).atualizarStatus(anyLong(), any());
+        }
+    }
+
+    @Nested
+    @DisplayName("Atualiza o status de uma cobranca via webhook")
+    class AtualizaStatusCobrancaViaWebhook {
+        @Test
+        @DisplayName("Deve atualizar o status de uma cobrança quando através do webhook do MercadoPago")
+        void deveAtualizarStatusCobranca_QuandoIdInformadoExistirEDadosCorretos() throws Exception {
+            //Arrange
+            when(buscaStatusPagamentoInputPort.buscaStatus(anyLong())).thenReturn(CobrancaHelper.criaStatusPagamentoDTO());
+            when(atualizaStatusCobrancaInputPort.atualizarStatus(anyLong(), any())).thenReturn(CobrancaHelper.criaCobrancaDTO());
+            when(cobrancaMapper.toCobrancaResponse(any())).thenReturn(CobrancaHelper.criaCobrancaResponse());
+
+            //Act
+            //Assert
+            mockMvc.perform(post("/cobrancas/{id}/webhook-status", 1)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(ObjectParaJsonMapper.converte(CobrancaHelper.criaWebhookStatusCobrancaRequest())))
+                    .andExpect(status().isOk());
+
+            verify(buscaStatusPagamentoInputPort, times(1)).buscaStatus(anyLong());
             verify(atualizaStatusCobrancaInputPort, times(1)).atualizarStatus(anyLong(), any());
         }
     }

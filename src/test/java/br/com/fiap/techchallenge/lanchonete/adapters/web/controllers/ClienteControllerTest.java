@@ -12,6 +12,7 @@ import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaClientePo
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.BuscaTodosClientesInputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.in.cliente.CadastraClienteInputPort;
 import br.com.fiap.techchallenge.lanchonete.utils.ClienteHelper;
+import br.com.fiap.techchallenge.lanchonete.utils.ObjectParaJsonMapper;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -140,7 +141,7 @@ public class ClienteControllerTest {
             //Assert
             mockMvc.perform(post("/clientes")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ClienteHelper.converteParaJson(clienteRequest)))
+                            .content(ObjectParaJsonMapper.converte(clienteRequest)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));
@@ -164,7 +165,7 @@ public class ClienteControllerTest {
             //Assert
             mockMvc.perform(put("/clientes/{id}", 1)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ClienteHelper.converteParaJson(clienteRequest)))
+                            .content(ObjectParaJsonMapper.converte(clienteRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.cpf").value("56312729036"))
                     .andExpect(jsonPath("$.email").value("cliente1@email.com"));

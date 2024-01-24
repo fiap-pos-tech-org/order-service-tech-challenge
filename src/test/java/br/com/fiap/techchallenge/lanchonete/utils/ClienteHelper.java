@@ -33,8 +33,4 @@ public class ClienteHelper {
     public static ClienteRequest criaClienteRequest() {
         return new ClienteRequest("cliente1", "56312729036", "cliente1@email.com");
     }
-
-    public static String converteParaJson(ClienteRequest clienteRequest) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(clienteRequest);
-    }
 }

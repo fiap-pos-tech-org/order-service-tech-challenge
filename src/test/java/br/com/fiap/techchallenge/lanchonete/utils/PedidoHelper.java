@@ -3,6 +3,9 @@ package br.com.fiap.techchallenge.lanchonete.utils;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.ClienteMapper;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Pedido;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.AtualizaStatusPedidoRequest;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.PedidoRequest;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.PedidoResponse;
 import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.*;
 
@@ -22,17 +25,8 @@ public class PedidoHelper {
         return new PedidoDTO(1L, clienteDTO, itemsPedido, StatusPedidoEnum.PENDENTE_DE_PAGAMENTO, BigDecimal.valueOf(1L), LocalDateTime.now());
     }
 
-    public static PedidoDTO criaPedidoDTOCopia(Pedido pedido) {
-        ClienteDTO clienteDTO = new ClienteMapper().toClienteDTO(pedido.getCliente());
-        List<ItemPedidoDTO> itemsPedido = new ItemPedidoMapper().toItemPedidoResponse(pedido.getItens());
-        return new PedidoDTO(
-                pedido.getId(),
-                clienteDTO,
-                itemsPedido,
-                pedido.getStatus(),
-                pedido.getValorTotal(),
-                pedido.getData()
-        );
+    public static List<PedidoDTO> criaListaPedidoDTO() {
+        return List.of(criaPedidoDTO());
     }
 
     public static AtualizaStatusPedidoDTO criaAtualizaStatusPedidoDTO() {
@@ -47,4 +41,30 @@ public class PedidoHelper {
         return new CriaPedidoDTO(1L, ItemPedidoHelper.criaListaCriaItemPedidoDTO());
     }
 
+    public static PedidoRequest criaPedidoRequest() {
+        return new PedidoRequest(
+                1L,
+                ItemPedidoHelper.criaListaItemPedidoRequest()
+        );
+    }
+
+    public static PedidoResponse criaPedidoResponse() {
+        return new PedidoResponse(
+                1L,
+                "Cliente",
+                ItemPedidoHelper.criaListaItemPedidoResponse(),
+                StatusPedidoEnum.PENDENTE_DE_PAGAMENTO,
+                BigDecimal.valueOf(1L),
+                LocalDateTime.now()
+        );
+    }
+
+    public static List<PedidoResponse> criaListaPedidoResponse() {
+        PedidoResponse pedidoResponse = criaPedidoResponse();
+        return List.of(pedidoResponse);
+    }
+
+    public static AtualizaStatusPedidoRequest criaAtualizaStatusPedidoRequest() {
+        return new AtualizaStatusPedidoRequest(StatusPedidoEnum.RECEBIDO);
+    }
 }

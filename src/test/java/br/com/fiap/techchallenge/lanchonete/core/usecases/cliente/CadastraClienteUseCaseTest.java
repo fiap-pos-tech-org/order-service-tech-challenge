@@ -8,16 +8,14 @@ import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.BadRequestExc
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import br.com.fiap.techchallenge.lanchonete.utils.ClienteHelper;
 import jakarta.validation.ConstraintViolationException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -49,56 +47,62 @@ public class CadastraClienteUseCaseTest {
         openMocks.close();
     }
 
-    @Test
-    @DisplayName("Deve cadastrar cliente e retornar cliente cadastrado quando dados cadastrais forem corretamente informados")
-    void deveCadastrarClienteERetornarClienteCadastrado_QuandoDadosCadastraisForemCorretamenteInformados() {
-        //Arrange
-        when(clienteJpaRepository.save(clienteSalvo)).thenReturn(clienteSalvo);
-        when(mapper.toCliente(clienteDTO)).thenReturn(clienteSalvo);
-        when(mapper.toClienteDTO(clienteSalvo)).thenReturn(clienteDTO);
+    @Nested
+    @DisplayName("Cadastra cliente")
+    class CadastraCliente {
+        @Test
+        @DisplayName("Deve cadastrar cliente e retornar cliente cadastrado quando dados cadastrais forem corretamente informados")
+        void deveCadastrarClienteERetornarClienteCadastrado_QuandoDadosCadastraisForemCorretamenteInformados() {
+            //Arrange
+            when(clienteJpaRepository.save(clienteSalvo)).thenReturn(clienteSalvo);
+            when(mapper.toCliente(clienteDTO)).thenReturn(clienteSalvo);
+            when(mapper.toClienteDTO(clienteSalvo)).thenReturn(clienteDTO);
 
-        //Act
-        ClienteDTO cliente = clienteUseCase.cadastrar(clienteDTO);
+            //Act
+            ClienteDTO cliente = clienteUseCase.cadastrar(clienteDTO);
 
-        //Assert
-        assertNotNull(cliente);
-        assertEquals(clienteDTO.nome(), cliente.nome());
-        assertEquals(clienteDTO.cpf(), cliente.cpf());
-        assertEquals(clienteDTO.email(), cliente.email());
-        verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
-    }
+            //Assert
 
-    @Test
-    @DisplayName("Deve lançar BadRequestException quando CPF ou email forem inválidos")
-    void deveLancarBadRequestException_QuandoCpfOuEmailForemInvalidos() {
-        //Arrange
-        when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(ConstraintViolationException.class);
-        when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());
+            assertThat(cliente).satisfies(c -> {
+                assertThat(c).isNotNull();
+                assertThat(c.nome()).isEqualTo(clienteDTO.nome());
+                assertThat(c.cpf()).isEqualTo(clienteDTO.cpf());
+                assertThat(c.email()).isEqualTo(clienteDTO.email());
+            });
 
-        //Act
-        //Assert
-        Exception exception = assertThrows(BadRequestException.class, () -> {
-            clienteUseCase.cadastrar(clienteDTO);
-        });
+            verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
+        }
 
-        assertEquals("Os campos email ou CPF estão inválidos", exception.getMessage());
-        verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
-    }
+        @Test
+        @DisplayName("Deve lançar BadRequestException quando CPF ou email forem inválidos")
+        void deveLancarBadRequestException_QuandoCpfOuEmailForemInvalidos() {
+            //Arrange
+            when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(ConstraintViolationException.class);
+            when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());
 
-    @Test
-    @DisplayName("Deve lançar BadRequestException quando CPF ou email já estiverem em uso")
-    void deveLancarBadRequestException_QuandoCpfOuEmailJaEstiveremEmUso() {
-        //Arrange
-        when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(DataIntegrityViolationException.class);
-        when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());
+            //Act
+            //Assert
+            assertThatThrownBy(() -> clienteUseCase.cadastrar(clienteDTO))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("Os campos email ou CPF estão inválidos");
 
-        //Act
-        //Assert
-        Exception exception = assertThrows(BadRequestException.class, () -> {
-            clienteUseCase.cadastrar(clienteDTO);
-        });
+            verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
+        }
 
-        assertEquals("Os campos email ou CPF já foram cadastrados", exception.getMessage());
-        verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
+        @Test
+        @DisplayName("Deve lançar BadRequestException quando CPF ou email já estiverem em uso")
+        void deveLancarBadRequestException_QuandoCpfOuEmailJaEstiveremEmUso() {
+            //Arrange
+            when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(DataIntegrityViolationException.class);
+            when(mapper.toCliente(any(ClienteDTO.class))).thenReturn(new Cliente());
+
+            //Act
+            //Assert
+            assertThatThrownBy(() -> clienteUseCase.cadastrar(clienteDTO))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage("Os campos email ou CPF já foram cadastrados");
+
+            verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
+        }
     }
 }

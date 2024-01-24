@@ -1,6 +1,8 @@
 package br.com.fiap.techchallenge.lanchonete.utils;
 
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.models.Produto;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.requests.ProdutoRequest;
+import br.com.fiap.techchallenge.lanchonete.adapters.web.models.responses.ProdutoResponse;
 import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.CategoriaEnum;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ProdutoDTO;
 
@@ -32,4 +34,27 @@ public class ProdutoHelper {
         return List.of(ProdutoHelper.criaProduto());
     }
 
+    public static ProdutoResponse criaProdutoResponse() {
+        return new ProdutoResponse(
+                1L,
+                "x-tudo",
+                CategoriaEnum.LANCHE,
+                BigDecimal.valueOf(1L),
+                "muito bom",
+                new byte[]{1,2}
+        );
+    }
+
+    public static ProdutoRequest criaProdutoRequest() {
+        return new ProdutoRequest(
+                "x-tudo",
+                CategoriaEnum.LANCHE,
+                BigDecimal.valueOf(1L),
+                "muito bom"
+        );
+    }
+
+    public static List<ProdutoDTO> criaListaProdutoDTO() {
+        return List.of(ProdutoHelper.criaProdutoDTO());
+    }
 }

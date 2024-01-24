@@ -8,10 +8,7 @@ import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.BadRequestExc
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.ClienteDTO;
 import br.com.fiap.techchallenge.lanchonete.utils.ClienteHelper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,8 +16,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class AtualizaClienteUseCaseTest {
@@ -55,57 +53,62 @@ public class AtualizaClienteUseCaseTest {
         openMocks.close();
     }
 
-    @Test
-    @DisplayName("Deve atualizar um cliente quando o cliente existir e informados os dados corretamente")
-    void deveAtualizarCliente_QuandoOClienteExistirEDadosCorretamenteInformados() {
-        //Arrange
-        when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.of(clienteSalvo));
-        when(clienteJpaRepository.save(any(Cliente.class))).thenReturn(clienteAtualizado);
-        when(mapper.toClienteDTO(any(Cliente.class))).thenReturn(clienteDTO);
+    @Nested
+    @DisplayName("Atualiza cliente")
+    class AtualizaCliente {
+        @Test
+        @DisplayName("Deve atualizar um cliente quando o cliente existir e informados os dados corretamente")
+        void deveAtualizarCliente_QuandoOClienteExistirEDadosCorretamenteInformados() {
+            //Arrange
+            when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.of(clienteSalvo));
+            when(clienteJpaRepository.save(any(Cliente.class))).thenReturn(clienteAtualizado);
+            when(mapper.toClienteDTO(any(Cliente.class))).thenReturn(clienteDTO);
 
-        //Act
-        var clienteSalvoAtualizado = clienteUseCase.atualizar(clienteDTO, ID);
+            //Act
+            var clienteSalvoAtualizado = clienteUseCase.atualizar(clienteDTO, ID);
 
-        //Assert
-        assertEquals(clienteDTO.cpf(), clienteSalvoAtualizado.cpf());
-        assertEquals(clienteDTO.email(), clienteSalvoAtualizado.email());
-        assertEquals(clienteDTO.nome(), clienteSalvoAtualizado.nome());
-        verify(clienteJpaRepository, times(1)).findById(any(Long.class));
-        verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
-    }
+            //Assert
+            assertThat(clienteSalvoAtualizado).satisfies(cliente -> {
+                assertEquals(clienteDTO.cpf(), cliente.cpf());
+                assertEquals(clienteDTO.email(), cliente.email());
+                assertEquals(clienteDTO.nome(), cliente.nome());
+            });
+            verify(clienteJpaRepository, times(1)).findById(any(Long.class));
+            verify(clienteJpaRepository, times(1)).save(any(Cliente.class));
+        }
 
-    @Test
-    @DisplayName("Deve lançar EntityNotFoundException quando um Id não cadastrado for informado")
-    void deveLancarEntityNotFoundException_QuandoUmIdNaoCadastradoForInformado() {
-        //Arrange
-        when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        @Test
+        @DisplayName("Deve lançar EntityNotFoundException quando um Id não cadastrado for informado")
+        void deveLancarEntityNotFoundException_QuandoUmIdNaoCadastradoForInformado() {
+            //Arrange
+            when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        //Act
-        String exceptionMessage = String.format("Cliente com Id %s não encontrado", NOT_FOUND_ID);
+            //Act
+            String exceptionMessage = String.format("Cliente com Id %s não encontrado", NOT_FOUND_ID);
 
-        //Assert
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
-            clienteUseCase.atualizar(clienteDTO, NOT_FOUND_ID);
-        });
-        assertEquals(exceptionMessage, exception.getMessage());
-        verify(clienteJpaRepository, times(1)).findById(any(Long.class));
-    }
+            //Assert
+            assertThatThrownBy(() -> clienteUseCase.atualizar(clienteDTO, NOT_FOUND_ID))
+                    .isInstanceOf(EntityNotFoundException.class)
+                    .hasMessage(exceptionMessage);
 
-    @Test
-    @DisplayName("Deve lançar BadRequestException quando um CPF inválido for informado")
-    void deveLancarBadRequestException_QuandoCpfOuEmailJaEstiveremEmUso() {
-        //Arrange
-        when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.of(clienteSalvo));
-        when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(DataIntegrityViolationException.class);
+            verify(clienteJpaRepository, times(1)).findById(any(Long.class));
+        }
 
-        //Act
-        String exceptionMessage = "Os campos email ou CPF já foram cadastrados";
+        @Test
+        @DisplayName("Deve lançar BadRequestException quando um CPF inválido for informado")
+        void deveLancarBadRequestException_QuandoCpfOuEmailJaEstiveremEmUso() {
+            //Arrange
+            String exceptionMessage = "Os campos email ou CPF já foram cadastrados";
+            when(clienteJpaRepository.findById(any(Long.class))).thenReturn(Optional.of(clienteSalvo));
+            when(clienteJpaRepository.save(any(Cliente.class))).thenThrow(DataIntegrityViolationException.class);
 
-        //Assert
-        Exception exception = assertThrows(BadRequestException.class, () -> {
-            clienteUseCase.atualizar(clienteDTO, ID);
-        });
-        assertEquals(exceptionMessage, exception.getMessage());
-        verify(clienteJpaRepository, times(1)).findById(any(Long.class));
+            //Act
+            //Assert
+            assertThatThrownBy(() -> clienteUseCase.atualizar(clienteDTO, ID))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(exceptionMessage);
+
+            verify(clienteJpaRepository, times(1)).findById(any(Long.class));
+        }
     }
 }
