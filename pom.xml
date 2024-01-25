@@ -24,7 +24,7 @@
 		<rest-assured.version>5.3.1</rest-assured.version>
 		<cucumber.version>7.15.0</cucumber.version>
 		<junit.version>1.9.3</junit.version>
-		<allure.version>2.12.0</allure.version>
+		<allure.version>2.23.0</allure.version>
 		<allure.report.version>2.4.1</allure.report.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<sonar.version>3.4.0.905</sonar.version>
