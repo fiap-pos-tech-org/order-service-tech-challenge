@@ -23,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -149,7 +148,7 @@ public class CobrancaControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(post("/cobrancas/{id}/status", 1)
+            mockMvc.perform(put("/cobrancas/{id}/status", 1)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(new AtualizaStatusCobrancaRequest(StatusCobrancaEnum.PAGO))))
                     .andExpect(status().isOk())
@@ -178,7 +177,7 @@ public class CobrancaControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(post("/cobrancas/{id}/status", 1)
+            mockMvc.perform(put("/cobrancas/{id}/status", 1)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(ObjectParaJsonMapper.converte(atualizaStatusCobrancaRequest)))
                     .andExpect(status().isNotFound());
@@ -200,10 +199,10 @@ public class CobrancaControllerTest {
 
             //Act
             //Assert
-            mockMvc.perform(post("/cobrancas/{id}/webhook-status", 1)
+            mockMvc.perform(put("/cobrancas/{id}/webhook-status", 1)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(ObjectParaJsonMapper.converte(CobrancaHelper.criaWebhookStatusCobrancaRequest())))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isNoContent());
 
             verify(buscaStatusPagamentoInputPort, times(1)).buscaStatus(anyLong());
             verify(atualizaStatusCobrancaInputPort, times(1)).atualizarStatus(anyLong(), any());

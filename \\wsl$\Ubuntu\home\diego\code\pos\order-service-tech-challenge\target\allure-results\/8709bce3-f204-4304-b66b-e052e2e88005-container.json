@@ -1,0 +1,1 @@
+{"uuid":"8709bce3-f204-4304-b66b-e052e2e88005","name":"Deve retornar uma lista de objetos tipo ClienteResponse quando receber como parâmetro uma lista de ClienteDTO","children":["1b124a3d-6b85-4931-a31b-62f2b86d9641"],"befores":[],"afters":[],"start":1706132032127,"stop":1706132032129}

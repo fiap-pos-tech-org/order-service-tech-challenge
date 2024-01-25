@@ -1,0 +1,1 @@
+{"uuid":"851df1da-10de-42a9-b46a-a694ee29027b","name":"Deve retornar uma lista de objetos tipo PedidoResponse quando receber como parâmetro uma lista de PedidoDTO","children":["0e4287b9-e629-42e2-915a-76bf5a1892a2"],"befores":[],"afters":[],"start":1706132032514,"stop":1706132032516}

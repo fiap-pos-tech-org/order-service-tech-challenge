@@ -1,0 +1,1 @@
+{"uuid":"c169f12d-0f78-4e32-8e97-0d1911a88084","name":"Deve retornar um objeto tipo PedidoResponse quando receber como parâmetro um PedidoDTO","children":["8c18ee3a-a3fa-4467-a9bc-a04e9c88bf2f"],"befores":[],"afters":[],"start":1706132032511,"stop":1706132032513}
