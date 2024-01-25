@@ -143,6 +143,12 @@
 			<artifactId>allure-rest-assured</artifactId>
 			<version>${allure.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.11</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -205,6 +211,40 @@
 					<reportVersion>${allure.report.version}</reportVersion>
 					<resultsDirectory>${project.build.directory}/allure-results/</resultsDirectory>
 					<reportDirectory>${project.build.directory}/allure-report</reportDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.11</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<excludes>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/repository/models/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/repository/jpa</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/web/handlers/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/adapters/web/models/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/domain/entities/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/domain/exceptions/</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/ports</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/core/**/*DTO.*</exclude>
+						<exclude>br/com/fiap/techchallenge/lanchonete/LanchoneteApplication.*</exclude>
+						<exclude>**/config/*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>

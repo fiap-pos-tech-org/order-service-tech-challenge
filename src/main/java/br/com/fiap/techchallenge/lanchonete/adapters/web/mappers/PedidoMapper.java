@@ -23,7 +23,7 @@ public class PedidoMapper {
         );
     }
 
-    public List<PedidoResponse> toPedidoListResponse(List<PedidoDTO> pedidosOut){
+    public List<PedidoResponse> toPedidoListResponse(List<PedidoDTO> pedidosOut) {
         List<PedidoResponse> pedidosResponse = new ArrayList<>();
         pedidosOut.forEach(pedidoOut -> pedidosResponse.add(toPedidoResponse(pedidoOut)));
         return pedidosResponse;

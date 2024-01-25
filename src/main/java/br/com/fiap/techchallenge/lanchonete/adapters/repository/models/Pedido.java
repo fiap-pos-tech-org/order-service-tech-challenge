@@ -49,6 +49,14 @@ public class Pedido {
         this.itens = itens;
     }
 
+    public Pedido(Long id, StatusPedidoEnum status, Cliente cliente, LocalDateTime data, BigDecimal valorTotal) {
+        this.id = id;
+        this.status = status;
+        this.cliente = cliente;
+        this.data = data;
+        this.valorTotal = valorTotal;
+    }
+
     public Pedido(StatusPedidoEnum status, Cliente cliente, LocalDateTime data, BigDecimal valorTotal) {
         this.status = status;
         this.cliente = cliente;
