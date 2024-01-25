@@ -10,7 +10,11 @@ import br.com.fiap.techchallenge.lanchonete.core.domain.entities.enums.StatusPed
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +33,7 @@ public class StepDefinition {
     private ClienteResponse clienteResponse;
     private PedidoResponse pedidoResponse;
     private CobrancaResponse cobrancaResponse;
+
 
     @Quando("preencher todos os dados para cadastro do produto")
     public ProdutoResponse preencherTodosDadosParaCadastrarProduto() {

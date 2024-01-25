@@ -15,9 +15,6 @@ public class ItemPedidoMapper {
 
     private ProdutoJpaRepository produtoJpaRepository;
 
-    public ItemPedidoMapper() {
-    }
-
     public ItemPedidoMapper(ProdutoJpaRepository produtoJpaRepository) {
         this.produtoJpaRepository = produtoJpaRepository;
     }
