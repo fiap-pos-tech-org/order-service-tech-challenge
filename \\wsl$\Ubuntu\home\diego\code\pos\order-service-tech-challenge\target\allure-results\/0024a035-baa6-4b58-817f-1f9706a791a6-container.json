@@ -1,1 +1,0 @@
-{"uuid":"0024a035-baa6-4b58-817f-1f9706a791a6","name":"Deve retornar um objeto tipo ClienteResponse quando receber como parâmetro um ClienteDTO","children":["bad85de9-492f-4038-bc23-148387f625a3"],"befores":[],"afters":[],"start":1706132032124,"stop":1706132032126}

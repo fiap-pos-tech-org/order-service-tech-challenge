@@ -1,1 +1,0 @@
-{"uuid":"171ff55b-540d-4b29-bfc8-d69b0240cfc7","name":"Deve retornar um objeto ProdutoResponse quando receber como parâmetro um ProdutoDTO","children":["8cced203-4811-4c9e-b4f7-cc69a65ef66f"],"befores":[],"afters":[],"start":1706132032407,"stop":1706132032409}
