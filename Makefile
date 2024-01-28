@@ -16,16 +16,10 @@ docker-build:
 	docker build -t tech-challenge:local -f ./Dockerfile .
 
 docker-start:
-	docker compose -f docker-compose.yml up -d
+	docker compose up -d
 
 docker-stop:
-	docker compose -f docker-compose.yml down
+	docker compose down
 
 sonar-analysis:
-	mvn clean verify sonar:sonar -Dsonar.host.url=$(SONARQUBE_URL) -Dsonar.login=admin -Dsonar.password=admin
-
-docker-start-sonar:
-	docker compose -f docker-compose-sonar.yml up -d
-
-docker-stop-sonar:
-	docker compose -f docker-compose-sonar.yml down
+	mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.token=$(SONAR_TOKEN) -Pcoverage
