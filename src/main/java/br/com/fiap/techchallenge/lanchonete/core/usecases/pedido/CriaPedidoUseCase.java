@@ -53,7 +53,7 @@ public class CriaPedidoUseCase implements CriaPedidoInputPort {
         return null;
     }
 
-    private void adicionaItemsPedido(Pedido pedido, List<CriaItemPedidoDTO> listaPedidosItem) {
+        private void adicionaItemsPedido(Pedido pedido, List<CriaItemPedidoDTO> listaPedidosItem) {
         listaPedidosItem.forEach(itemPedidoIn -> {
             var produtoOut = buscaProdutoPorIdOutputPort.buscarPorId(itemPedidoIn.produtoId());
             pedido.addItemPedido(

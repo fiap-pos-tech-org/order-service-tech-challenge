@@ -11,6 +11,9 @@ public class WebhookStatusCobrancaRequest {
     @NotNull
     private WebhookDataRequest data;
 
+    public WebhookStatusCobrancaRequest() {
+    }
+
     public WebhookStatusCobrancaRequest(String action, WebhookDataRequest data) {
         this.action = action;
         this.data = data;

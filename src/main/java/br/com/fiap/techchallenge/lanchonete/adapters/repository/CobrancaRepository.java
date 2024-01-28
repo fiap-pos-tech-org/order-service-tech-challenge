@@ -3,9 +3,8 @@ package br.com.fiap.techchallenge.lanchonete.adapters.repository;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.jpa.CobrancaJpaRepository;
 import br.com.fiap.techchallenge.lanchonete.adapters.repository.mappers.CobrancaMapper;
 import br.com.fiap.techchallenge.lanchonete.core.domain.exceptions.EntityNotFoundException;
-import br.com.fiap.techchallenge.lanchonete.core.domain.entities.Cobranca;
-import br.com.fiap.techchallenge.lanchonete.core.dtos.CobrancaDTO;
 import br.com.fiap.techchallenge.lanchonete.core.dtos.AtualizaStatusCobrancaDTO;
+import br.com.fiap.techchallenge.lanchonete.core.dtos.CobrancaDTO;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.cobranca.AtualizaStatusCobrancaOutputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.cobranca.BuscaCobrancaOutputPort;
 import br.com.fiap.techchallenge.lanchonete.core.ports.out.cobranca.CriaCobrancaOutputPort;
@@ -21,6 +20,7 @@ public class CobrancaRepository implements CriaCobrancaOutputPort, BuscaCobranca
         this.cobrancaJpaRepository = cobrancaJpaRepository;
         this.cobrancaMapper = cobrancaMapper;
     }
+
     @Override
     public CobrancaDTO criar(CobrancaDTO cobrancaDTO) {
         var cobranca = cobrancaMapper.toCobranca(cobrancaDTO);
@@ -37,7 +37,7 @@ public class CobrancaRepository implements CriaCobrancaOutputPort, BuscaCobranca
     @Override
     public CobrancaDTO buscarPorPedidoId(Long pedidoId) {
         var cobranca = cobrancaJpaRepository.findFirstByPedidoIdOrderByCreatedAtDesc(pedidoId)
-                                            .orElseThrow(() -> new EntityNotFoundException("Cobrança com o pedidoId " + pedidoId + " não existe"));
+                .orElseThrow(() -> new EntityNotFoundException("Cobrança com o pedidoId " + pedidoId + " não existe"));
         return cobrancaMapper.toCobrancaOut(cobranca);
     }
 

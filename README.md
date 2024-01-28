@@ -42,7 +42,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
     ```
 3. Execute o comando para buildar o projeto: 
     ```bash
-        ./mvnw clean package -DskipTests
+        ./mvnw clean package
     ```
 4. Execute o comando para iniciar o ambiente Docker: 
     ```bash
@@ -69,9 +69,39 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
         minikube service lanchonete-service --url
     ```
 
+### Para rodar os testes do projeto execute os comandos abaixo:
+
+1. Testes unitários:
+    ```bash
+        mvn test
+    ```
+2. Testes integrados:
+    ```bash
+        mvn test -P integration-test
+    ```
+3. Testes de sistema:
+    ```bash
+        mvn test -P system-test
+    ```
+4. Testes de sistema filtrando por tags:
+    ```bash
+        mvn test -P system-test -Dcucumber.filter.tags="@smoke"
+    ```
+
+### Para verificar a cobertura dos testes no ambiente local execute os comandos abaixo:
+
+1. Jacoco:
+    ```bash
+        mvn test
+        mvn jacoco:report
+    ```
+
+2. Sonar local:
+    ```bash
+        docker compose -f docker-compose-local.yml up -d
+        mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=sonar
+    ```
+
 ## Contribuidores
 - [pedroprj](https://github.com/pedroprj) - Pedro Pereira dos Reis Júnior - pedrojr9119@gmail.com - RM 350295
-- [engmarcosalves](https://github.com/engmarcosalves) - Marcos de Oliveira Alves - eng.marcos.alves@gmail.com - RM 349707
-- [Vandrs](https://github.com/Vandrs) - Vanderson Wilson da Rosa Nunes - vann.nunes@gmail.com - RM 349849
-- [coelhos-gabi](https://github.com/coelhos-gabi) - Gabriela Siqueira do Vale Coelho - coelhos.gabi@gmail.com - RM 349957
 - [diego-jo](https://github.com/diego-jo) - Diego José Oliveira - oliveiraj.diego@gmail.com - RM 350296
