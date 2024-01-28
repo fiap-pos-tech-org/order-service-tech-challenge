@@ -88,6 +88,20 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
         mvn test -P system-test -Dcucumber.filter.tags="@smoke"
     ```
 
+### Para verificar a cobertura dos testes no ambiente local execute os comandos abaixo:
+
+1. Jacoco:
+    ```bash
+        mvn test
+        mvn jacoco:report
+    ```
+
+2. Sonar local:
+    ```bash
+        docker compose -f docker-compose-local.yml up -d
+        mvn clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=sonar
+    ```
+
 ## Contribuidores
 - [pedroprj](https://github.com/pedroprj) - Pedro Pereira dos Reis Júnior - pedrojr9119@gmail.com - RM 350295
 - [diego-jo](https://github.com/diego-jo) - Diego José Oliveira - oliveiraj.diego@gmail.com - RM 350296
