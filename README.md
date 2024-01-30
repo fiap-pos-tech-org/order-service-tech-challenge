@@ -27,8 +27,8 @@ Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [vw
 
 Siga as instruções abaixo para executar o projeto via docker/docker-compose:
 
-1. Faça o clone deste repositório: `https://github.com/fiap-pos/tech-challenge.git`
-2. Acesse o diretório do projeto: `cd tech-challenge`
+1. Faça o clone deste repositório: `https://github.com/fiap-pos-tech-org/order-service-tech-challenge.git`
+2. Acesse o diretório do projeto: `cd order-service-tech-challenge`
 3. Execute o comando para iniciar o ambiente Docker: `docker-compose up -d`
 4. Aguarde até que os containers estejam prontos e em execução.
 5. Acesse a API pelo seu client de escolha pelo seguinte endereço base: `http://localhost:8080`
@@ -38,7 +38,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
 1. Certifique-se de ter o Java 17 instalado em sua máquina.
 2. Acesse o diretório do projeto: 
     ```bash 
-        cd tech-challenge
+        cd order-service-tech-challenge
     ```
 3. Execute o comando para buildar o projeto: 
     ```bash
@@ -66,7 +66,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
     - Acesse a API pelo seu client de escolha pelo seguinte endereço base: `http://{IP_DO_SEU_CLUSTER}:30000`
     - Se você estiver utilizando o minikube obetenha a url da aplição através do comando:
     ```bash 
-        minikube service lanchonete-service --url
+        minikube service pedido-service --url
     ```
 
 ### Para rodar os testes do projeto execute os comandos abaixo:

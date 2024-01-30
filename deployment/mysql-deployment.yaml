@@ -39,10 +39,10 @@ spec:
                   name: secrets
                   key: mysql-root-password
           volumeMounts:
-            - mountPath: /lanchonete-volume
-              name: lanchonete-volume
+            - mountPath: /servico-pedido-volume
+              name: servico-pedido-volume
       volumes:
-        - name: lanchonete-volume
+        - name: servico-pedido-volume
           hostPath:
-            path: /home/lanchonete-volume
+            path: /home/servico-pedido-volume
             type: DirectoryOrCreate

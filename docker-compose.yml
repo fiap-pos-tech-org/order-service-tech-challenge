@@ -8,7 +8,7 @@ services:
       test: "exit 0"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: lanchonete_db
+      MYSQL_DATABASE: pedido_db
     ports:
       - "3306:3306"
     networks:
@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     environment:
-      DB_HOST: 'mysql:3306/lanchonete_db'
+      DB_HOST: 'mysql:3306/pedido_db'
       DB_USER: 'root'
       DB_PASS: '123456'
     ports:
