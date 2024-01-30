@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lanchonete-ingress
+  name: servico-pedido-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -14,6 +14,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: lanchonete-service
+              name: pedido-service
               port:
                 number: 80
