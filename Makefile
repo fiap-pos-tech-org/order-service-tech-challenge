@@ -1,6 +1,6 @@
 unit-test:
 	echo "Executando testes unitários"
-	mvn test
+	mvn clean test
 
 integration-test:
 	echo "Executando testes de integração"

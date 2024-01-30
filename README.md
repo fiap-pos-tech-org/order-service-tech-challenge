@@ -5,7 +5,6 @@ Este projeto é um sistema de controle de pedidos para uma lanchonete. Ele possu
 - Cadastro e gerenciamento de clientes
 - Cadastro e gerenciamento de produtos
 - Criação, atualização e acompanhamento de pedidos
-- Integração com meios de pagamento
 
 ## Rotas disponíveis na API
 Todas as rotas estão listadas através do Swagger no endereço `http://localhost:8080/swagger-ui/index.html`
@@ -21,7 +20,7 @@ Antes de executar o projeto, verifique se você possui os seguintes requisitos:
 
 ## Imagem Docker do projeto
 
-Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [vwnunes/tech-challenge-61](https://hub.docker.com/repository/docker/vwnunes/tech-challenge-61/general)
+Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [geter/pedido-techchallenge38](https://hub.docker.com/repository/docker/geter/techchallenge38/general)
 
 ## Executando o Projeto
 
