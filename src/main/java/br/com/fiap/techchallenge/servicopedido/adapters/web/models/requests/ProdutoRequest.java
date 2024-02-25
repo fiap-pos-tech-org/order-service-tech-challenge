@@ -3,15 +3,15 @@ package br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ProdutoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.CategoriaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public class ProdutoRequest {
 
     @Schema(example = "HAMBURGER ANGUS")
+    @Size(max = 30)
+    @Pattern(regexp = "^[a-zA-Z0-9 ]*$")
     private String nome;
 
     @Schema(example = "LANCHE")
