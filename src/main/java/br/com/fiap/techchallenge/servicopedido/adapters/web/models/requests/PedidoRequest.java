@@ -2,13 +2,16 @@ package br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests;
 
 import br.com.fiap.techchallenge.servicopedido.core.dtos.CriaItemPedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.CriaPedidoDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class  PedidoRequest{
 
+    @Schema(example = "1")
     private Long clienteId;
+
     private List<ItemPedidoRequest> itens;
 
     public PedidoRequest() {

@@ -2,6 +2,7 @@ package br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests;
 
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ProdutoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.CategoriaEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,9 +11,16 @@ import java.math.BigDecimal;
 
 public class ProdutoRequest {
 
+    @Schema(example = "HAMBURGER ANGUS")
     private String nome;
+
+    @Schema(example = "LANCHE")
     private CategoriaEnum categoria;
+
+    @Schema(example = "35.90")
     private BigDecimal preco;
+
+    @Schema(example = "Hamburger Angus 200mg de carne")
     private String descricao;
 
     public ProdutoRequest() {

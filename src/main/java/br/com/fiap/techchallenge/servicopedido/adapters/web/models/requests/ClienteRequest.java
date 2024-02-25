@@ -1,11 +1,17 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests;
 
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ClienteDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ClienteRequest {
 
+    @Schema(example = "Cliente 1")
     private String nome;
+
+    @Schema(example = "94187479015")
     private String cpf;
+
+    @Schema(example = "cliente1@gmail.com")
     private String email;
 
     public ClienteRequest() {

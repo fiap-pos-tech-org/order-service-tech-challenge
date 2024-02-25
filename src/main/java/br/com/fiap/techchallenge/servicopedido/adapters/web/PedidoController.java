@@ -7,6 +7,7 @@ import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPe
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class PedidoController extends ControllerBase {
 
     @Operation(summary = "Busca pedido pelo id")
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoResponse> buscarPorId(@PathVariable("id") Long id) {
+    public ResponseEntity<PedidoResponse> buscarPorId(@Parameter(example = "1") @PathVariable("id") Long id) {
         var pedidoOut = buscarPedidoPorIdInputPort.buscarPorId(id);
         var pedidoResponse = pedidoMapper.toPedidoResponse(pedidoOut);
         return ResponseEntity.ok(pedidoResponse);

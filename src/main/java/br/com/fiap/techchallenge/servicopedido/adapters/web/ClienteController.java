@@ -9,6 +9,7 @@ import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaClient
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaTodosClientesInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.CadastraClienteInputPort;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,9 @@ public class ClienteController extends ControllerBase {
         this.mapperWeb = mapperWeb;
     }
 
-    @Operation(summary = "Busca um Cliente pelo CPF")  @GetMapping("/{cpf}")
-    public ResponseEntity<ClienteResponse> buscaPorCpf(@PathVariable String cpf) {
+    @Operation(summary = "Busca um Cliente pelo CPF")
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ClienteResponse> buscaPorCpf(@Parameter(example = "94187479015") @PathVariable String cpf) {
         ClienteResponse clienteResponse = mapperWeb.toClienteResponse(
                 buscaClientePorIdOuCpfInputPort.buscar(cpf)
         );
@@ -75,7 +77,7 @@ public class ClienteController extends ControllerBase {
 
     @Operation(summary = "Atualiza Cliente pelo id")
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> atualiza(@RequestBody ClienteRequest clienteRequest, @PathVariable Long id) {
+    public ResponseEntity<ClienteResponse> atualiza(@RequestBody ClienteRequest clienteRequest, @Parameter(example = "1") @PathVariable Long id) {
         ClienteDTO clienteAtualizado = atualizaClienteInputPort.atualizar(clienteRequest.toClienteDTO(), id);
 
         return ResponseEntity.ok(mapperWeb.toClienteResponse(clienteAtualizado));
