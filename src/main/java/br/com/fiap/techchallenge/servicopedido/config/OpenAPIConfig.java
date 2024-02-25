@@ -26,6 +26,9 @@ public class OpenAPIConfig {
                 .version("1.0")
                 .description("Esta API expõe endpoints para gerenciar o sistema de pedidos de uma lanchonete do Tech Challenge");
 
-        return new OpenAPI().info(info).servers(List.of(devServer));
+        return new OpenAPI()
+                .info(info)
+                .servers(List.of(devServer));
     }
+
 }

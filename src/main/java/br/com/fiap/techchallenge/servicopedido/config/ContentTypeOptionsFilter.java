@@ -1,4 +1,4 @@
-package br.com.fiap.techchallenge.servicopedido;
+package br.com.fiap.techchallenge.servicopedido.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

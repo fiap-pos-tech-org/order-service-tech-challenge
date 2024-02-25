@@ -21,6 +21,7 @@ public class ProdutoRequest {
     private BigDecimal preco;
 
     @Schema(example = "Hamburger Angus 200mg de carne")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]*$")
     private String descricao;
 
     public ProdutoRequest() {
