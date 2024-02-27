@@ -87,7 +87,7 @@ public class ExceptionsHandler {
     public ResponseEntity<ErrorDetails> handlerException(Exception e, HttpServletRequest request) {
         var errorDetails = new ErrorDetails.Builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message(e.toString())
+                .message(e.getMessage())
                 .timestamp(System.currentTimeMillis())
                 .build();
         logger.error(e.getMessage(), e);
