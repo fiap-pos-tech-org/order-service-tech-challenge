@@ -11,7 +11,7 @@ public class ProdutoRequest {
 
     @Schema(example = "HAMBURGER ANGUS")
     @Size(max = 30)
-    @Pattern(regexp = "^[a-zA-Z0-9 -]*$", message = "O campo 'nome' deve corresponder ao padrão ^[a-zA-Z0-9 -]*$")
+    @Pattern(regexp = "^[A-zÀ-ú0-9 -]*$", message = "O campo 'nome' deve corresponder ao padrão ^[A-zÀ-ú0-9 -]*$")
     @NotBlank(message = "O campo 'nome' é obrigatório")
     private String nome;
 
@@ -25,7 +25,7 @@ public class ProdutoRequest {
     private BigDecimal preco;
 
     @Schema(example = "Hamburger Angus 200mg de carne")
-    @Pattern(regexp = "^[A-zÀ-ú0-9 -]*$", message = "O campo 'descricao' deve corresponder ao padrão ^[a-zA-Z0-9 -]*$")
+    @Pattern(regexp = "^[A-zÀ-ú0-9 -]*$", message = "O campo 'descricao' deve corresponder ao padrão ^[A-zÀ-ú0-9 -]*$")
     @NotBlank(message = "O campo 'descricao' é obrigatório")
     private String descricao;
 
