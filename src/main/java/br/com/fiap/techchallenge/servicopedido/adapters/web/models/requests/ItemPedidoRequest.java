@@ -1,9 +1,14 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 public class ItemPedidoRequest {
+
+    @Schema(example = "1")
     private Long produtoId;
+
+    @Schema(example = "2")
     private Integer quantidade;
 
     public ItemPedidoRequest() {
