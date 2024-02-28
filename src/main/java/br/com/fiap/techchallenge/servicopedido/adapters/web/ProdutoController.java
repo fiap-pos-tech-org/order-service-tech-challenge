@@ -7,6 +7,7 @@ import br.com.fiap.techchallenge.servicopedido.core.dtos.AtualizaImagemProdutoDT
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.CategoriaEnum;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -59,7 +60,7 @@ public class ProdutoController extends ControllerBase {
 
     @Operation(summary = "Atualiza a imagem de um Produto")
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> upload(@PathVariable("id") Long id, @RequestPart("imagem") MultipartFile image) {
+    public ResponseEntity<Void> upload(@Parameter(example = "1") @PathVariable("id") Long id, @RequestPart("imagem") MultipartFile image) {
         try {
 
             atualizaImagemProdutoInputPort.atualizar(new AtualizaImagemProdutoDTO(image.getBytes()), id);
@@ -72,7 +73,7 @@ public class ProdutoController extends ControllerBase {
 
     @Operation(summary = "Edita um Produto por Id")
     @PutMapping(value = "/{id}")
-    public @ResponseBody ResponseEntity<ProdutoResponse> editar(@PathVariable("id") Long id, @RequestBody ProdutoRequest produtoRequest) {
+    public @ResponseBody ResponseEntity<ProdutoResponse> editar(@Parameter(example = "1") @PathVariable("id") Long id, @RequestBody ProdutoRequest produtoRequest) {
         var produtoOut = editaProdutoInputPort.editar(produtoRequest.toProdutoDTO(), id);
         var produtoResponse = produtoMapper.toProdutoResponse(produtoOut);
 
@@ -81,7 +82,7 @@ public class ProdutoController extends ControllerBase {
 
     @Operation(summary = "Remove um Produto por Id")
     @DeleteMapping(value = "/{id}")
-    public @ResponseBody ResponseEntity<ProdutoResponse> remover(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<ProdutoResponse> remover(@Parameter(example = "1") @PathVariable("id") Long id) {
         var produtoOut = removeProdutoInputPort.remover(id);
         var produtoResponse = produtoMapper.toProdutoResponse(produtoOut);
 
@@ -90,7 +91,7 @@ public class ProdutoController extends ControllerBase {
 
     @Operation(summary = "Busca um Produto por Id")
     @GetMapping(value = "/{id}")
-    public @ResponseBody ResponseEntity<ProdutoResponse> buscarPorId(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<ProdutoResponse> buscarPorId(@Parameter(example = "1") @PathVariable("id") Long id) {
         var produtoOut = buscaProdutoPorIdInputPort.buscarPorId(id);
         var produtoResponse = produtoMapper.toProdutoResponse(produtoOut);
 
@@ -109,7 +110,7 @@ public class ProdutoController extends ControllerBase {
 
     @Operation(summary = "Busca um Produto por Categoria")
     @GetMapping(value = "/categoria/{categoria}")
-    public @ResponseBody ResponseEntity<List<ProdutoResponse>> buscarProdutosPorCategoria(@PathVariable("categoria") String categoria) {
+    public @ResponseBody ResponseEntity<List<ProdutoResponse>> buscarProdutosPorCategoria(@Parameter(example = "LANCHE") @PathVariable("categoria") String categoria) {
         var produtos = buscaProdutoPorCategoriaInputPort.buscarPorCategoria(CategoriaEnum.fromString(categoria)).stream()
                 .map(produtoMapper::toProdutoResponse)
                 .toList();
