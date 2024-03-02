@@ -1,14 +1,17 @@
 package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 
+import br.com.fiap.techchallenge.servicopedido.core.domain.entities.Cliente;
+import br.com.fiap.techchallenge.servicopedido.core.domain.entities.Endereco;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.ItemPedido;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.Pedido;
-import br.com.fiap.techchallenge.servicopedido.core.domain.entities.Cliente;
-import br.com.fiap.techchallenge.servicopedido.core.dtos.*;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.CriaItemPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.CriaPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.BuscaProdutoPorIdOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.CriaPedidoOutputPort;
+import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.BuscaProdutoPorIdOutputPort;
 
 import java.util.List;
 
@@ -46,13 +49,15 @@ public class CriaPedidoUseCase implements CriaPedidoInputPort {
                     clienteDTO.id(),
                     clienteDTO.nome(),
                     clienteDTO.cpf(),
-                    clienteDTO.email()
+                    clienteDTO.email(),
+                    clienteDTO.telefone(),
+                    new Endereco(clienteDTO.endereco())
             );
         }
         return null;
     }
 
-        private void adicionaItemsPedido(Pedido pedido, List<CriaItemPedidoDTO> listaPedidosItem) {
+    private void adicionaItemsPedido(Pedido pedido, List<CriaItemPedidoDTO> listaPedidosItem) {
         listaPedidosItem.forEach(itemPedidoIn -> {
             var produtoOut = buscaProdutoPorIdOutputPort.buscarPorId(itemPedidoIn.produtoId());
             pedido.addItemPedido(

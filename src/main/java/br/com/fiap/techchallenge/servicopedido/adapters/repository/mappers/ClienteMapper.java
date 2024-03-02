@@ -9,11 +9,19 @@ import java.util.List;
 @Component
 public class ClienteMapper {
 
+    private final EnderecoMapper enderecoMapper;
+
+    public ClienteMapper(EnderecoMapper enderecoMapper) {
+        this.enderecoMapper = enderecoMapper;
+    }
+
     public Cliente toCliente(ClienteDTO cliente) {
         return new Cliente(
                 cliente.nome(),
                 cliente.cpf(),
-                cliente.email()
+                cliente.email(),
+                cliente.telefone(),
+                enderecoMapper.toEndereco(cliente.endereco())
         );
     }
 
@@ -22,7 +30,9 @@ public class ClienteMapper {
                 cliente.getId(),
                 cliente.getNome(),
                 cliente.getCpf(),
-                cliente.getEmail()
+                cliente.getEmail(),
+                cliente.getTelefone(),
+                enderecoMapper.toEnderecoDTO(cliente.getEndereco())
         );
     }
 

@@ -35,6 +35,7 @@ public class ClienteRepository implements AtualizaClienteOutputPort, BuscaClient
         Cliente savedCliente = clienteJpaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente com Id %s não encontrado", id)));
         BeanUtils.copyProperties(cliente, savedCliente, "id");
+        BeanUtils.copyProperties(cliente.endereco(), savedCliente.getEndereco(), "id");
 
         try {
             return mapper.toClienteDTO(clienteJpaRepository.save(savedCliente));

@@ -77,9 +77,10 @@ public class ClienteController extends ControllerBase {
 
     @Operation(summary = "Atualiza Cliente pelo id")
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> atualiza(@RequestBody ClienteRequest clienteRequest, @Parameter(example = "1") @PathVariable Long id) {
+    public ResponseEntity<ClienteResponse> atualiza(@Valid @RequestBody ClienteRequest clienteRequest, @Parameter(example = "1") @PathVariable Long id) {
         ClienteDTO clienteAtualizado = atualizaClienteInputPort.atualizar(clienteRequest.toClienteDTO(), id);
 
         return ResponseEntity.ok(mapperWeb.toClienteResponse(clienteAtualizado));
     }
+
 }

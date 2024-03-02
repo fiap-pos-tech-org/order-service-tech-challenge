@@ -3,8 +3,10 @@ package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.ClienteJpaRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ClienteMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Pedido;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
@@ -35,6 +37,8 @@ public class CriaPedidoUseCaseTest {
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
     @Mock
+    private ClienteMapper clienteMapper;
+    @Mock
     private ClienteJpaRepository clienteJpaRepository;
     @InjectMocks
     private PedidoMapper pedidoMapper;
@@ -60,6 +64,7 @@ public class CriaPedidoUseCaseTest {
         when(buscaClienteOutputPort.buscar(anyLong())).thenReturn(ClienteHelper.criaClienteDTO());
         when(buscaProdutoPorIdOutputPort.buscarPorId(anyLong())).thenReturn(ProdutoHelper.criaProdutoDTO());
         when(pedidoJpaRepository.save(any(Pedido.class))).thenReturn(PedidoHelper.criaPedido());
+        when(clienteMapper.toClienteDTO(any(Cliente.class))).thenReturn(ClienteHelper.criaClienteDTO());
 
         //Act
         PedidoDTO pedidoDTO = pedidoUseCase.criar(PedidoHelper.criaCriaPedidoDTO());
@@ -79,5 +84,6 @@ public class CriaPedidoUseCaseTest {
         verify(buscaClienteOutputPort, times(1)).buscar(anyLong());
         verify(buscaProdutoPorIdOutputPort, times(1)).buscarPorId(anyLong());
         verify(pedidoJpaRepository, times(1)).save(any(Pedido.class));
+        verify(clienteMapper).toClienteDTO(any(Cliente.class));
     }
 }

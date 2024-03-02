@@ -15,11 +15,13 @@ public class ClienteHelper {
     }
 
     public static ClienteDTO criaClienteDTO() {
-        return new ClienteDTO(1L, "cliente1", "56312729036", "cliente1@email.com");
+        return new ClienteDTO(1L, "cliente1", "56312729036", "cliente1@email.com",
+                "(34) 99988-7766", EnderecoHelper.criaEnderecoDTO());
     }
 
     public static Cliente criaCliente() {
-        return new Cliente("cliente", "80313100098", "cliente@email.com");
+        return new Cliente("cliente", "80313100098", "cliente@email.com",
+                "(34) 99988-7766", EnderecoHelper.criaEndereco());
     }
 
     public static Cliente criaCopiaClienteDTO() {
@@ -27,12 +29,15 @@ public class ClienteHelper {
         return new Cliente(
                 clienteDTO.nome(),
                 clienteDTO.cpf(),
-                clienteDTO.email()
+                clienteDTO.email(),
+                clienteDTO.telefone(),
+                EnderecoHelper.criaEndereco()
         );
     }
 
     public static ClienteResponse criaClienteResponse() {
-        return new ClienteResponse(1L, "cliente1", "56312729036", "cliente1@email.com");
+        return new ClienteResponse(1L, "cliente1", "56312729036", "cliente1@email.com",
+                "(34) 99988-7766", EnderecoHelper.criaEnderecoResponse());
     }
 
     public static ClienteRequest criaClienteRequest() {
@@ -44,7 +49,7 @@ public class ClienteHelper {
     }
 
     public static ClienteRequest criaClienteRequest(String nome, String cpf, String email) {
-        return new ClienteRequest(nome, cpf, email);
+        return new ClienteRequest(nome, cpf, email, "(34) 99988-7766", EnderecoHelper.criaEnderecoRequest());
     }
 
     private static String gerarEmail() {

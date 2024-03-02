@@ -2,9 +2,12 @@ package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ClienteMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +27,8 @@ public class BuscaTodosPedidosUseCaseTest {
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
+    @Mock
+    private ClienteMapper clienteMapper;
     @InjectMocks
     private PedidoMapper pedidoMapper;
     private PedidoRepository pedidoRepository;
@@ -47,6 +52,7 @@ public class BuscaTodosPedidosUseCaseTest {
     void deveBuscarTodosOsPedidos_QuandoMetodoBuscarTodosForInvocado() {
         //Arrange
         when(pedidoJpaRepository.findAll()).thenReturn(PedidoHelper.criaListaPedidos());
+        when(clienteMapper.toClienteDTO(any(Cliente.class))).thenReturn(ClienteHelper.criaClienteDTO());
 
         //Act
         List<PedidoDTO> listaPedidos = pedidoUseCase.buscarTodos();
@@ -61,5 +67,6 @@ public class BuscaTodosPedidosUseCaseTest {
         });
 
         verify(pedidoJpaRepository, times(1)).findAll();
+        verify(clienteMapper).toClienteDTO(any(Cliente.class));
     }
 }

@@ -9,12 +9,20 @@ import java.util.List;
 @Component("ClienteMapperWeb")
 public class ClienteMapper {
 
+    private final EnderecoMapper enderecoMapper;
+
+    public ClienteMapper(EnderecoMapper enderecoMapper) {
+        this.enderecoMapper = enderecoMapper;
+    }
+
     public ClienteResponse toClienteResponse(ClienteDTO cliente) {
         return new ClienteResponse(
-          cliente.id(),
-          cliente.nome(),
-          cliente.cpf(),
-          cliente.email()
+                cliente.id(),
+                cliente.nome(),
+                cliente.cpf(),
+                cliente.email(),
+                cliente.telefone(),
+                enderecoMapper.toEnderecoResponse(cliente.endereco())
         );
     }
 

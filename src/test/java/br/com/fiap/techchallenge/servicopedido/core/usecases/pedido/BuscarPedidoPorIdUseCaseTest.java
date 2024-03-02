@@ -2,11 +2,14 @@ package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ClienteMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
+import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Cliente;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +32,8 @@ public class BuscarPedidoPorIdUseCaseTest {
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
+    @Mock
+    private ClienteMapper clienteMapper;
     @InjectMocks
     private PedidoMapper pedidoMapper;
     private PedidoRepository pedidoRepository;
@@ -54,6 +59,7 @@ public class BuscarPedidoPorIdUseCaseTest {
         //Arrange
         Long id = 1L;
         when(pedidoJpaRepository.findById(any())).thenReturn(Optional.of(PedidoHelper.criaPedido()));
+        when(clienteMapper.toClienteDTO(any(Cliente.class))).thenReturn(ClienteHelper.criaClienteDTO());
 
         //Act
         PedidoDTO pedido = pedidoUseCase.buscarPorId(id);
@@ -66,6 +72,7 @@ public class BuscarPedidoPorIdUseCaseTest {
         });
 
         verify(pedidoJpaRepository, times(1)).findById(any());
+        verify(clienteMapper).toClienteDTO(any(Cliente.class));
     }
 
     @Test

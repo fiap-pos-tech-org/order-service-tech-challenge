@@ -24,12 +24,22 @@ public class Cliente {
     @Column(unique = true)
     private String email;
 
-    public Cliente() {}
+    @NotEmpty
+    private String telefone;
 
-    public Cliente(String nome, String cpf, String email) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
+
+    public Cliente() {
+    }
+
+    public Cliente(String nome, String cpf, String email, String telefone, Endereco endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
+        this.telefone = telefone;
+        this.endereco = endereco;
     }
 
     public Long getId() {
@@ -62,5 +72,21 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
