@@ -1,32 +1,26 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers;
 
-import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Cliente;
+import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.ClienteResponse;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ClienteDTO;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ClienteMapper {
 
-    public Cliente toCliente(ClienteDTO cliente) {
-        return new Cliente(
-                cliente.nome(),
-                cliente.cpf(),
-                cliente.email()
-        );
+    private final EnderecoMapper enderecoMapper;
+
+    public ClienteMapper(EnderecoMapper enderecoMapper) {
+        this.enderecoMapper = enderecoMapper;
     }
 
-    public ClienteDTO toClienteDTO(Cliente cliente) {
+    public ClienteDTO toClienteDTO(ClienteResponse clienteResponse) {
         return new ClienteDTO(
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getCpf(),
-                cliente.getEmail()
+                clienteResponse.getId(),
+                clienteResponse.getNome(),
+                clienteResponse.getCpf(),
+                clienteResponse.getEmail(),
+                clienteResponse.getTelefone(),
+                enderecoMapper.toEnderecoDTO(clienteResponse.getEndereco())
         );
-    }
-
-    public List<ClienteDTO> toClienteListDTO(List<Cliente> clientes) {
-        return clientes.stream().map(this::toClienteDTO).toList();
     }
 }

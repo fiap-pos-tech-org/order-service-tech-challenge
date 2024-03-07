@@ -1,7 +1,5 @@
 package br.com.fiap.techchallenge.servicopedido.utils;
 
-import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Cliente;
-import br.com.fiap.techchallenge.servicopedido.adapters.web.models.requests.ClienteRequest;
 import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.ClienteResponse;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ClienteDTO;
 
@@ -15,36 +13,14 @@ public class ClienteHelper {
     }
 
     public static ClienteDTO criaClienteDTO() {
-        return new ClienteDTO(1L, "cliente1", "56312729036", "cliente1@email.com");
-    }
-
-    public static Cliente criaCliente() {
-        return new Cliente("cliente", "80313100098", "cliente@email.com");
-    }
-
-    public static Cliente criaCopiaClienteDTO() {
-        ClienteDTO clienteDTO = criaClienteDTO();
-        return new Cliente(
-                clienteDTO.nome(),
-                clienteDTO.cpf(),
-                clienteDTO.email()
-        );
+        return new ClienteDTO(1L, "cliente1", gerarCPF(), gerarEmail(), "(34) 99988-7766",
+                EnderecoHelper.criaEnderecoDTO());
     }
 
     public static ClienteResponse criaClienteResponse() {
-        return new ClienteResponse(1L, "cliente1", "56312729036", "cliente1@email.com");
-    }
-
-    public static ClienteRequest criaClienteRequest() {
-        return criaClienteRequest("cliente1", "56312729036", "cliente1@email.com");
-    }
-
-    public static ClienteRequest criaClienteRequestAleatorio() {
-        return criaClienteRequest("Cliente Teste", gerarCPF(), gerarEmail());
-    }
-
-    public static ClienteRequest criaClienteRequest(String nome, String cpf, String email) {
-        return new ClienteRequest(nome, cpf, email);
+        var clienteDTO = criaClienteDTO();
+        return new ClienteResponse(clienteDTO.id(), clienteDTO.nome(), gerarCPF(), gerarEmail(), clienteDTO.telefone(),
+                EnderecoHelper.criaEnderecoResponse());
     }
 
     private static String gerarEmail() {

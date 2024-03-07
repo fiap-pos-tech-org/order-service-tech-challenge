@@ -1,29 +1,19 @@
 package br.com.fiap.techchallenge.servicopedido.config;
 
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.AtualizaClienteInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaClientePorIdOuCpfInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaTodosClientesInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.CadastraClienteInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPedidosInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.AtualizaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaTodosClientesOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.CadastraClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscaTodosPedidosOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscarPedidoPorIdOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.CriaPedidoOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.*;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.AtualizaClienteUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaClientePorIdOuCpfIdOuCpfUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaTodosClientesUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.CadastraClienteUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscaTodosPedidosUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscarPedidoPorIdUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.CriaPedidoUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.produto.*;
+import com.squareup.okhttp.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -66,26 +56,6 @@ public class CoreInjectionConfig {
     }
 
     @Bean
-    AtualizaClienteInputPort atualizaCliente(AtualizaClienteOutputPort atualizaClienteOutputPort) {
-        return new AtualizaClienteUseCase(atualizaClienteOutputPort);
-    }
-
-    @Bean
-    BuscaClientePorIdOuCpfInputPort buscaClientePorCpf(BuscaClienteOutputPort buscaClienteOutputPort) {
-        return new BuscaClientePorIdOuCpfIdOuCpfUseCase(buscaClienteOutputPort);
-    }
-
-    @Bean
-    BuscaTodosClientesInputPort buscaTodosClientes(BuscaTodosClientesOutputPort buscaTodosClientesOutputPort) {
-        return new BuscaTodosClientesUseCase(buscaTodosClientesOutputPort);
-    }
-
-    @Bean
-    CadastraClienteInputPort cadastraCliente(CadastraClienteOutputPort cadastraClienteOutputPort) {
-        return new CadastraClienteUseCase(cadastraClienteOutputPort);
-    }
-
-    @Bean
     CriaPedidoInputPort criarPedido(
             CriaPedidoOutputPort criaPedidoOutputPort,
             BuscaProdutoPorIdOutputPort buscaProdutoPorIdOutputPort,
@@ -95,13 +65,20 @@ public class CoreInjectionConfig {
     }
 
     @Bean
-    BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort) {
-        return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort);
+    BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort,
+                                                 BuscaClienteOutputPort buscaClienteOutputPort) {
+        return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort, buscaClienteOutputPort);
     }
 
     @Bean
-    BuscaTodosPedidosInputPort buscarTodosPedidos(BuscaTodosPedidosOutputPort buscaTodosPedidosOutputPort) {
-        return new BuscaTodosPedidosUseCase(buscaTodosPedidosOutputPort);
+    BuscaTodosPedidosInputPort buscarTodosPedidos(BuscaTodosPedidosOutputPort buscaTodosPedidosOutputPort,
+                                                  BuscaClienteOutputPort buscaClienteOutputPort) {
+        return new BuscaTodosPedidosUseCase(buscaTodosPedidosOutputPort, buscaClienteOutputPort);
+    }
+
+    @Bean
+    OkHttpClient okHttpClient() {
+        return new OkHttpClient();
     }
 
 }

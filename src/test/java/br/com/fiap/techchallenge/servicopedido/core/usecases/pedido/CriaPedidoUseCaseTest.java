@@ -1,7 +1,6 @@
 package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoRepository;
-import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.ClienteJpaRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
@@ -34,8 +33,6 @@ public class CriaPedidoUseCaseTest {
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
-    @Mock
-    private ClienteJpaRepository clienteJpaRepository;
     @InjectMocks
     private PedidoMapper pedidoMapper;
     private PedidoRepository pedidoRepository;
@@ -56,7 +53,6 @@ public class CriaPedidoUseCaseTest {
     @DisplayName("Deve criar pedido quando todos os atributos forem informados corretamente")
     void deveCriarPedido_QuandoTodosOsAtributosForemInformadosCorretamente() {
         //Arrange
-        when(clienteJpaRepository.findById(anyLong())).thenReturn(Optional.of(ClienteHelper.criaCliente()));
         when(buscaClienteOutputPort.buscar(anyLong())).thenReturn(ClienteHelper.criaClienteDTO());
         when(buscaProdutoPorIdOutputPort.buscarPorId(anyLong())).thenReturn(ProdutoHelper.criaProdutoDTO());
         when(pedidoJpaRepository.save(any(Pedido.class))).thenReturn(PedidoHelper.criaPedido());
@@ -75,7 +71,6 @@ public class CriaPedidoUseCaseTest {
             assertThat(pedido.dataCriacao()).isNotNull();
         });
 
-        verify(clienteJpaRepository, times(1)).findById(anyLong());
         verify(buscaClienteOutputPort, times(1)).buscar(anyLong());
         verify(buscaProdutoPorIdOutputPort, times(1)).buscarPorId(anyLong());
         verify(pedidoJpaRepository, times(1)).save(any(Pedido.class));

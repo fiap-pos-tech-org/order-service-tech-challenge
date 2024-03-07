@@ -40,7 +40,6 @@ public class PedidoRepository implements CriaPedidoOutputPort, BuscaTodosPedidos
         return pedidoMapper.toPedidoDTO(pedidoBuscado);
     }
 
-
     private br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Pedido buscarPedidoPorId(Long id) {
         return pedidoJpaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido " + id + " não encontrado"));

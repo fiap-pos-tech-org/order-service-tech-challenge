@@ -20,7 +20,7 @@ public class PedidoHelper {
     }
 
     public static Pedido criaPedido() {
-        return new Pedido(1L, StatusPedidoEnum.PENDENTE_DE_PAGAMENTO, ClienteHelper.criaCliente(), LocalDateTime.now(), BigDecimal.valueOf(1L));
+        return new Pedido(1L, StatusPedidoEnum.PENDENTE_DE_PAGAMENTO, 1L, LocalDateTime.now(), BigDecimal.valueOf(1L));
     }
 
     public static PedidoDTO criaPedidoDTO() {

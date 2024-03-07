@@ -3,7 +3,6 @@ package br.com.fiap.techchallenge.servicopedido.bdd;
 import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.ClienteResponse;
 import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.PedidoResponse;
 import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.ProdutoResponse;
-import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import br.com.fiap.techchallenge.servicopedido.utils.ProdutoHelper;
 import io.cucumber.java.pt.Dado;
@@ -161,88 +160,16 @@ public class StepDefinition {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    @Quando("preencher todos os dados para cadastro do cliente")
-    public ClienteResponse preencherTodosDadosParaCadastrarCliente() {
-        var clienteRequest = ClienteHelper.criaClienteRequestAleatorio();
-        response = given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(clienteRequest)
-                .when()
-                .post("/clientes");
-        return response.then()
-                .extract()
-                .as(ClienteResponse.class);
-    }
-
-    @Então("o cliente deve ser criado com sucesso")
-    public void clienteDeveSerCriadoComSucesso() {
-        response.then()
-                .statusCode(HttpStatus.CREATED.value());
-    }
-
-    @Então("deve exibir o cliente cadastrado")
-    public void deveExibirClienteCadastrado() {
-        response.then()
-                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"));
-    }
-
     @Dado("que um cliente já está cadastrado")
     public void clienteJaCadastrado() {
-        clienteResponse = preencherTodosDadosParaCadastrarCliente();
-    }
-
-    @Quando("realizar a requisição para alterar o cliente")
-    public void realizarRequisicaoParaAlterarCliente() {
-        clienteResponse.setNome("Cliente Teste Alterado");
-        response = given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(clienteResponse)
-                .when()
-                .put("/clientes/{id}", clienteResponse.getId());
-    }
-
-    @Então("o cliente deve ser alterado com sucesso")
-    public void clienteDeveSerAlteradoComSucesso() {
-        response.then()
-                .statusCode(HttpStatus.OK.value());
-    }
-
-    @Então("deve exibir o cliente alterado")
-    public void deveExibirClienteAlterado() {
-        response.then()
-                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"))
-                .body("nome", equalTo(clienteResponse.getNome()));
-    }
-
-    @Quando("requisitar a lista de todos os clientes")
-    public void requisitarListaTodosClientes() {
         response = given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .get("/clientes");
-    }
+                .get("http://localhost:8081/clientes/1");
 
-    @Então("os clientes devem ser exibidos com sucesso")
-    public void clientesDevemSerExibidosComSucesso() {
-        response.then()
-                .statusCode(HttpStatus.OK.value())
-                .body("$", hasSize(greaterThanOrEqualTo(1)))
-                .body("$", everyItem(anything()));
-    }
-
-    @Quando("realizar a busca do cliente")
-    public void realizarBuscaCliente() {
-        response = given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .get("/clientes/{cpf}", clienteResponse.getCpf());
-    }
-
-    @Então("o cliente deve ser exibido com sucesso")
-    public void clienteDeveSerExibidoComSucesso() {
-        response.then()
-                .statusCode(HttpStatus.OK.value())
-                .body(matchesJsonSchemaInClasspath("./schemas/ClienteResponseSchema.json"));
+        clienteResponse = response.then()
+                .extract()
+                .as(ClienteResponse.class);
     }
 
     @Quando("preencher todos os dados para cadastro do pedido")
