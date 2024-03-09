@@ -4,7 +4,7 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpa
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotFoundException;
-import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.AtualizaStatusPedidoOutputPort;
@@ -44,11 +44,10 @@ public class PedidoRepository implements CriaPedidoOutputPort, BuscaTodosPedidos
     public PedidoDTO criar(PedidoDTO pedidoIn) {
         var pedido = pedidoMapper.toPedido(pedidoIn);
         var pedidoSalvo = pedidoJpaRepository.save(pedido);
-        var mensagem = new MensagemPedidoDTO(
+        var mensagem = new MensagemPedidoPagamentoDTO(
                 pedidoSalvo.getId(),
                 pedidoSalvo.getCliente().getId(),
-                pedidoSalvo.getValorTotal(),
-                pedidoSalvo.getStatus()
+                pedidoSalvo.getValorTotal()
         );
 
         publicaPedidoInputPort.publicar(mensagem, topicPagamentoPendenteArn);
@@ -74,5 +73,4 @@ public class PedidoRepository implements CriaPedidoOutputPort, BuscaTodosPedidos
         return pedidoJpaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido " + id + " não encontrado"));
     }
-
 }

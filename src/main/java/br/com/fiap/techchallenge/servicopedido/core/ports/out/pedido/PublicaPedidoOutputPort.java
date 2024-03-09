@@ -1,7 +1,8 @@
 package br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido;
 
-import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemDTOBase;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 
 public interface PublicaPedidoOutputPort {
-    void publicar(MensagemPedidoDTO mensagem, String topicoArn);
+    void publicar(MensagemDTOBase mensagem, String topicoArn);
 }

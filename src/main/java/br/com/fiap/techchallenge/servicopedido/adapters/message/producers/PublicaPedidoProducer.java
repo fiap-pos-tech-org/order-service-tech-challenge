@@ -1,6 +1,7 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.message.producers;
 
-import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemDTOBase;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.PublicaPedidoOutputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ public class PublicaPedidoProducer implements PublicaPedidoOutputPort {
     }
 
     @Override
-    public void publicar(MensagemPedidoDTO mensagem, String topicoArn) {
+    public void publicar(MensagemDTOBase mensagem, String topicoArn) {
         //TODO: Change this shit
         String message;
         try {

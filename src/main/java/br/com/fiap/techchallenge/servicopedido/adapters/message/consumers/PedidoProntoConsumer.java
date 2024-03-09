@@ -1,6 +1,6 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.message.consumers;
 
-import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.AtualizaStatusPedidoInputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ public class PedidoProntoConsumer {
     @JmsListener(destination = "${aws.sqs.fila-pedido-pronto}")
     public void receiveMessage(@Payload String message) throws JMSException, JsonProcessingException {
         System.out.printf("Mensagem recebida do serviço produçao %s\n", message);
-        var pedido = mapper.readValue(message, MensagemPedidoDTO.class);
+        var pedido = mapper.readValue(message, MensagemPedidoPagamentoDTO.class);
 
         atualizaStatusPedidoInputPort.atualizarStatus(pedido.idPedido(), pedido.status());
     }
