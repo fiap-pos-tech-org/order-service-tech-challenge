@@ -24,6 +24,10 @@ spec:
               value: ${DB_USERNAME}
             - name: DB_PASS
               value: ${DB_PASSWORD}
+            - name: ENV
+              value: ${ENV}
+            - name: PAYMENT_TOPIC_ARN
+              value: ${PAYMENT_TOPIC_ARN}
           volumeMounts:
             - mountPath: /servico-pedido-volume
               name: servico-pedido-volume
