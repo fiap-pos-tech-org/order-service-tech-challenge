@@ -12,7 +12,13 @@ env:
   DB_HOST: ${{ secrets.DB_HOST }}
   DB_USER: ${{ secrets.DB_USER }}
   DB_PASS: ${{ secrets.DB_PASS }}
-  PAYMENT_TOPIC_ARN: ${{ vars.PAYMENT_TOPIC_ARN }}
+  TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
+  TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
+  FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
+  FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
+  FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
+  FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
+  GROUP_ID: ${{ vars.GROUP_ID }}
   ENV: ${{ vars.ENV }}
 
 jobs:
@@ -87,13 +93,18 @@ jobs:
           docker build -t geter/pedido-techchallenge38:latest .
           docker push geter/pedido-techchallenge38
 
-      # TODO: alterar a forma de criar as variáveis de ambiente abaixo pois o deployment da aplicação não está conseguindo enxergar ou pegar essas variáveis direto do ssm pela aplicação
       - name: Deploy to EKS
         env:
           DB_HOST: $DB_HOST
           DB_USER: $DB_USER
           DB_PASS: $DB_PASS
-          PAYMENT_TOPIC_ARN: $PAYMENT_TOPIC_ARN
+          TOPICO_PAGAMENTO_PENDENTE_ARN: $TOPICO_PAGAMENTO_PENDENTE_ARN
+          TOPICO_PRODUCAO_ARN: $TOPICO_PRODUCAO_ARN
+          FILA_PEDIDO_PRONTO: $FILA_PEDIDO_PRONTO
+          FILA_PAGAMENTO_APROVADO: $FILA_PAGAMENTO_APROVADO
+          FILA_PAGAMENTO_RECUSADO: $FILA_PAGAMENTO_RECUSADO
+          FILA_PAGAMENTO_CANCELADO: $FILA_PAGAMENTO_CANCELADO
+          GROUP_ID: $GROUP_ID
           ENV: $ENV
         run: |
           kubectl apply -f deployment/pedido-deployment.yaml
