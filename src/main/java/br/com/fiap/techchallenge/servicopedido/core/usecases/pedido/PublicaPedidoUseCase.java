@@ -17,4 +17,9 @@ public class PublicaPedidoUseCase implements PublicaPedidoInputPort {
     public void publicar(MensagemDTOBase mensagem, String topicoArn) {
         publicaPedido.publicar(mensagem, topicoArn);
     }
+
+    @Override
+    public void publicarFifo(MensagemDTOBase mensagem, String topicoArn) {
+        publicaPedido.publicarFifo(mensagem, topicoArn);
+    }
 }

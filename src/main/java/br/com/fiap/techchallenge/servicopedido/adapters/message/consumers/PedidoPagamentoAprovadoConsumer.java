@@ -36,7 +36,8 @@ public class PedidoPagamentoAprovadoConsumer {
         var pedido = mapper.readValue(mensagem, MensagemPedidoPagamentoDTO.class);
 
         var pedidoAtualizado = atualizaStatusPedidoInputPort.atualizarStatus(pedido.getIdPedido(), StatusPedidoEnum.EM_PREPARACAO);
-        var mensagemProducao = new MensagemPedidoProducaoDTO(pedido.getIdPedido(), pedidoAtualizado.itens());
-        publicaPedidoInputPort.publicar(mensagemProducao, topicoProducaoArn);
+        var mensagemProducao = new MensagemPedidoProducaoDTO(pedido.getIdPedido(), StatusPedidoEnum.EM_PREPARACAO, pedidoAtualizado.itens());
+
+        publicaPedidoInputPort.publicarFifo(mensagemProducao, topicoProducaoArn);
     }
 }

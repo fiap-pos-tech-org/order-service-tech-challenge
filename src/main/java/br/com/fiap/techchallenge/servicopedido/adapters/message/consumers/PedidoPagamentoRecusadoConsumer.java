@@ -3,7 +3,6 @@ package br.com.fiap.techchallenge.servicopedido.adapters.message.consumers;
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.AtualizaStatusPedidoInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -15,13 +14,10 @@ import org.springframework.stereotype.Service;
 public class PedidoPagamentoRecusadoConsumer {
 
     private final AtualizaStatusPedidoInputPort atualizaStatusPedidoInputPort;
-    private final PublicaPedidoInputPort publicaPedidoInputPort;
     private final ObjectMapper mapper;
 
-    public PedidoPagamentoRecusadoConsumer(AtualizaStatusPedidoInputPort atualizaStatusPedidoInputPort,
-                                           PublicaPedidoInputPort publicaPedidoInputPort, ObjectMapper mapper) {
+    public PedidoPagamentoRecusadoConsumer(AtualizaStatusPedidoInputPort atualizaStatusPedidoInputPort, ObjectMapper mapper) {
         this.atualizaStatusPedidoInputPort = atualizaStatusPedidoInputPort;
-        this.publicaPedidoInputPort = publicaPedidoInputPort;
         this.mapper = mapper;
     }
 

@@ -1,7 +1,10 @@
 package br.com.fiap.techchallenge.servicopedido.core.dtos;
 
 public class MensagemDTOBase {
-    private final Long idPedido;
+    private Long idPedido;
+
+    public MensagemDTOBase() {
+    }
 
     public MensagemDTOBase(Long idPedido) {
         this.idPedido = idPedido;
@@ -9,5 +12,9 @@ public class MensagemDTOBase {
 
     public Long getIdPedido() {
         return idPedido;
+    }
+
+    public void setIdPedido(Long idPedido) {
+        this.idPedido = idPedido;
     }
 }

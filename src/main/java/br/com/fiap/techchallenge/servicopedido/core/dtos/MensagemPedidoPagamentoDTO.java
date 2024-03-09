@@ -2,9 +2,12 @@ package br.com.fiap.techchallenge.servicopedido.core.dtos;
 
 import java.math.BigDecimal;
 
-public final class MensagemPedidoPagamentoDTO extends MensagemDTOBase {
-    private final Long idCliente;
-    private final BigDecimal valorTotal;
+public class MensagemPedidoPagamentoDTO extends MensagemDTOBase {
+    private Long idCliente;
+    private BigDecimal valorTotal;
+
+    public MensagemPedidoPagamentoDTO() {
+    }
 
     public MensagemPedidoPagamentoDTO(Long idPedido, Long idCliente, BigDecimal valorTotal) {
         super(idPedido);
@@ -16,7 +19,15 @@ public final class MensagemPedidoPagamentoDTO extends MensagemDTOBase {
         return idCliente;
     }
 
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
+    }
+
     public BigDecimal getValorTotal() {
         return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 }

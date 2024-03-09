@@ -5,4 +5,5 @@ import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamento
 
 public interface PublicaPedidoInputPort {
     void publicar(MensagemDTOBase mensagem, String topicoArn);
+    void publicarFifo(MensagemDTOBase mensagem, String topicoArn);
 }
