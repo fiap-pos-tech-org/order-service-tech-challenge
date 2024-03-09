@@ -9,11 +9,13 @@ import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPedidosInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
-import br.com.fiap.techchallenge.servicopedido.utils.ObjectParaJsonMapper;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -23,9 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
 public class PedidoControllerTest {
     private MockMvc mockMvc;
     private AutoCloseable openMocks;
+    @Autowired
+    private JsonMapper jsonMapper;
     @Mock
     private CriaPedidoInputPort criaPedidoInputPort;
     @Mock
@@ -70,7 +75,7 @@ public class PedidoControllerTest {
             //Assert
             mockMvc.perform(post("/pedidos")
                             .contentType("application/json")
-                            .content(ObjectParaJsonMapper.converte(PedidoHelper.criaPedidoRequest())))
+                            .content(jsonMapper.writeValueAsString(PedidoHelper.criaPedidoRequest())))
                     .andExpect(status().isCreated())
                     .andExpectAll(
                             jsonPath("$.id").value(1),

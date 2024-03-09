@@ -2,7 +2,6 @@ package br.com.fiap.techchallenge.servicopedido.adapters.gateways;
 
 import br.com.fiap.techchallenge.servicopedido.adapters.web.handlers.ErrorDetails;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.NotFoundException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -30,13 +29,8 @@ public abstract class GatewayBase {
         }
     }
 
-    protected JsonMapper getJsonMapper() {
-        return JsonMapper.builder()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .findAndAddModules()
-                .build();
-    }
-
     protected abstract OkHttpClient getHttpClient();
+
+    protected abstract JsonMapper getJsonMapper();
 
 }

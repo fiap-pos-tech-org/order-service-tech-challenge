@@ -5,6 +5,7 @@ import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.Cli
 import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.utils.PropertySourceResolver;
 import br.com.fiap.techchallenge.servicopedido.utils.ResponseHelper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -28,7 +29,8 @@ class ClienteGatewayTest {
 
     @Autowired
     private PropertySourceResolver propertySourceResolver;
-
+    @Autowired
+    private JsonMapper jsonMapper;
     @Mock
     private OkHttpClient okHttpClient;
     @Mock
@@ -40,11 +42,14 @@ class ClienteGatewayTest {
 
     private AutoCloseable openMocks;
 
+    private ResponseHelper responseHelper;
+
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
 
-        clienteGateway = new ClienteGateway(okHttpClient, clienteMapper, propertySourceResolver.getUrlApiclientes());
+        clienteGateway = new ClienteGateway(okHttpClient, clienteMapper, propertySourceResolver.getUrlApiclientes(), jsonMapper);
+        responseHelper = new ResponseHelper(jsonMapper);
     }
 
     @AfterEach
@@ -57,7 +62,7 @@ class ClienteGatewayTest {
     void deveBuscarCliente_QuandoInformadoUmId() throws Exception {
         var clienteDTO = ClienteHelper.criaClienteDTO();
         var clienteResponse = ClienteHelper.criaClienteResponse();
-        var response = ResponseHelper.getResponse(clienteResponse, 200);
+        var response = responseHelper.getResponse(clienteResponse, 200);
 
         //Arrange
         when(okHttpClient.newCall(any(Request.class))).thenReturn(call);
