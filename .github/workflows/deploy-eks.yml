@@ -81,25 +81,33 @@ jobs:
           docker build -t geter/pedido-techchallenge38:latest .
           docker push geter/pedido-techchallenge38
 
-      - uses: swdotcom/update-and-apply-kubernetes-configs@v1.3
+      - name: Deploy EKS
+        uses: swdotcom/update-and-apply-kubernetes-configs@v1.3
         with:
           k8-config-file-paths: |
+            deployment/alb-ingress.yaml
             deployment/configmap.yaml
+            deployment/mysql-configmap.yaml
+            deployment/mysql-deployment.yaml
+            deployment/mysql-service.yaml
             deployment/pedido-deployment.yaml
+            deployment/pedido-service.yaml
+            deployment/pedido-serviceaccount.yaml
+            deployment/secrets.yaml
           replacement-method: defined
-          env:
-            DB_HOST: ${{ secrets.DB_HOST }}
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASS: ${{ secrets.DB_PASS }}
-            TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
-            TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
-            FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
-            FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
-            FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
-            FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
-            GROUP_ID: ${{ vars.GROUP_ID }}
-            ENV: ${{ vars.ENV }}
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
+          TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
+          FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
+          FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
+          FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
+          FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
+          GROUP_ID: ${{ vars.GROUP_ID }}
+          ENV: ${{ vars.ENV }}
 
-      - name: Deploy to EKS
+      - name: Verify EKS deployment
         run: |
           kubectl rollout status -f deployment/
