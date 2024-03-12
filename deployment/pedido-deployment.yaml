@@ -48,6 +48,7 @@ spec:
           hostPath:
             path: /home/servico-pedido-volume
             type: DirectoryOrCreate
+      serviceAccountName: pedido-serviceaccount
   replicas: 2
   selector:
     matchLabels:
