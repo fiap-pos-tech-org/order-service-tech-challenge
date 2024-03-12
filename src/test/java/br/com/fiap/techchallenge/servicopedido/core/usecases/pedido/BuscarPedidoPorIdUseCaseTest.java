@@ -7,6 +7,7 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.Pedid
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,8 @@ public class BuscarPedidoPorIdUseCaseTest {
     @Mock
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
+    private PublicaPedidoInputPort publicaPedidoInputPort;
+    @Mock
     private ItemPedidoMapper itemPedidoMapper;
     @InjectMocks
     private PedidoMapper pedidoMapper;
@@ -39,7 +42,7 @@ public class BuscarPedidoPorIdUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository);
+        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
         pedidoUseCase = new BuscarPedidoPorIdUseCase(pedidoRepository);
     }
 

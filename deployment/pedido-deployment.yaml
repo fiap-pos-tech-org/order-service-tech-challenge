@@ -24,6 +24,22 @@ spec:
               value: ${DB_USERNAME}
             - name: DB_PASS
               value: ${DB_PASSWORD}
+            - name: TOPICO_PAGAMENTO_PENDENTE_ARN
+              value: ${TOPICO_PAGAMENTO_PENDENTE_ARN}
+            - name: TOPICO_PRODUCAO_ARN
+              value: ${TOPICO_PRODUCAO_ARN}
+            - name: FILA_PEDIDO_PRONTO
+              value: ${FILA_PEDIDO_PRONTO}
+            - name: FILA_PAGAMENTO_APROVADO
+              value: ${FILA_PAGAMENTO_APROVADO}
+            - name: FILA_PAGAMENTO_RECUSADO
+              value: ${FILA_PAGAMENTO_RECUSADO}
+            - name: FILA_PAGAMENTO_CANCELADO
+              value: ${FILA_PAGAMENTO_CANCELADO}
+            - name: GROUP_ID
+              value: ${GROUP_ID}
+            - name: ENV
+              value: ${ENV}
           volumeMounts:
             - mountPath: /servico-pedido-volume
               name: servico-pedido-volume
@@ -32,6 +48,7 @@ spec:
           hostPath:
             path: /home/servico-pedido-volume
             type: DirectoryOrCreate
+      serviceAccountName: pedido-serviceaccount
   replicas: 2
   selector:
     matchLabels:

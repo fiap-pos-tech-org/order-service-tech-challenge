@@ -4,25 +4,19 @@ import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.AtualizaCli
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaClientePorIdOuCpfInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaTodosClientesInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.CadastraClienteInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPedidosInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.AtualizaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaTodosClientesOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.CadastraClienteOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscaTodosPedidosOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscarPedidoPorIdOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.CriaPedidoOutputPort;
+import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.AtualizaClienteUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaClientePorIdOuCpfIdOuCpfUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaTodosClientesUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.CadastraClienteUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscaTodosPedidosUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscarPedidoPorIdUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.CriaPedidoUseCase;
+import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.produto.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -95,6 +89,11 @@ public class CoreInjectionConfig {
     }
 
     @Bean
+    AtualizaStatusPedidoInputPort atualizaStatusPedido(AtualizaStatusPedidoOutputPort atualizaStatusPedidoOutputPort){
+        return new AtualizaStatusPedidoUseCase(atualizaStatusPedidoOutputPort);
+    }
+
+    @Bean
     BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort) {
         return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort);
     }
@@ -104,4 +103,8 @@ public class CoreInjectionConfig {
         return new BuscaTodosPedidosUseCase(buscaTodosPedidosOutputPort);
     }
 
+    @Bean
+    PublicaPedidoInputPort publicaPedidoInputPort(PublicaPedidoOutputPort publicaPedidoOutputPort) {
+        return new PublicaPedidoUseCase(publicaPedidoOutputPort);
+    }
 }
