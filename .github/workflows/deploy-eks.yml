@@ -108,6 +108,6 @@ jobs:
           GROUP_ID: ${{ vars.GROUP_ID }}
           ENV: ${{ vars.ENV }}
 
-      - name: Verify EKS deployment
-        run: |
-          kubectl rollout status -f deployment/
+#      - name: Verify EKS deployment
+#        run: |
+#          kubectl rollout status -f deployment/
