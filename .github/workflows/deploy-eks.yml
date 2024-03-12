@@ -86,14 +86,9 @@ jobs:
         with:
           k8-config-file-paths: |
             deployment/alb-ingress.yaml
-            deployment/configmap.yaml
-            deployment/mysql-configmap.yaml
-            deployment/mysql-deployment.yaml
-            deployment/mysql-service.yaml
             deployment/pedido-deployment.yaml
             deployment/pedido-service.yaml
             deployment/pedido-serviceaccount.yaml
-            deployment/secrets.yaml
           replacement-method: defined
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
