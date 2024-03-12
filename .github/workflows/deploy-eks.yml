@@ -106,8 +106,5 @@ jobs:
           GROUP_ID: $GROUP_ID
           ENV: $ENV
         run: |
-          kubectl apply -f deployment/pedido-serviceaccount.yaml
-          kubectl apply -f deployment/pedido-deployment.yaml
-          kubectl apply -f deployment/pedido-service.yaml
-          kubectl apply -f deployment/alb-ingress.yaml
+          kubectl apply -f deployment/
           kubectl get svc pedido-service
