@@ -109,4 +109,5 @@ jobs:
           kubectl apply -f deployment/pedido-deployment.yaml
           kubectl apply -f deployment/pedido-service.yaml
           kubectl apply -f deployment/alb-ingress.yaml
+          kubectl apply -f deployment/pedido-serviceaccount.yaml
           kubectl get svc pedido-service
