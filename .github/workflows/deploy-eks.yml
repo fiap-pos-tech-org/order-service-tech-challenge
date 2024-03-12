@@ -8,17 +8,6 @@ on:
 env:
   EKS_CLUSTER: tech-challenge-38
   PROJECT_KEY: fiap-pos-tech-org_order-service-tech-challenge
-  DB_HOST: ${{ secrets.DB_HOST }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_PASS: ${{ secrets.DB_PASS }}
-  TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
-  TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
-  FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
-  FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
-  FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
-  FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
-  GROUP_ID: ${{ vars.GROUP_ID }}
-  ENV: ${{ vars.ENV }}
 
 jobs:
   sonar-analysis:
@@ -94,17 +83,17 @@ jobs:
 
       - name: Deploy to EKS
         env:
-          DB_HOST: ${{ DB_HOST }}
-          DB_USER: ${{ DB_USER }}
-          DB_PASS: ${{ DB_PASS }}
-          TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ TOPICO_PAGAMENTO_PENDENTE_ARN }}
-          TOPICO_PRODUCAO_ARN: ${{ TOPICO_PRODUCAO_ARN }}
-          FILA_PEDIDO_PRONTO: ${{ FILA_PEDIDO_PRONTO }}
-          FILA_PAGAMENTO_APROVADO: ${{ FILA_PAGAMENTO_APROVADO }}
-          FILA_PAGAMENTO_RECUSADO: ${{ FILA_PAGAMENTO_RECUSADO }}
-          FILA_PAGAMENTO_CANCELADO: ${{ FILA_PAGAMENTO_CANCELADO }}
-          GROUP_ID: ${{ GROUP_ID }}
-          ENV: ${{ ENV }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
+          TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
+          FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
+          FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
+          FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
+          FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
+          GROUP_ID: ${{ vars.GROUP_ID }}
+          ENV: ${{ vars.ENV }}
         run: |
           kubectl apply -f deployment/
           kubectl get svc pedido-service
