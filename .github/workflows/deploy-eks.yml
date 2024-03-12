@@ -6,7 +6,7 @@ on:
     branches: main
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: ${{ vars.AWS_REGION }}
   EKS_CLUSTER: eks-tech-challenge
   PROJECT_KEY: fiap-pos-tech-org_order-service-tech-challenge
   DB_HOST: ${{ secrets.DB_HOST }}
