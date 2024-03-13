@@ -1,5 +1,6 @@
 package br.com.fiap.techchallenge.servicopedido.core.usecases.pedido;
 
+import br.com.fiap.techchallenge.servicopedido.adapters.gateways.ClienteGateway;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
@@ -7,6 +8,8 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.Pedid
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotFoundException;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
+import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +35,8 @@ public class BuscarPedidoPorIdUseCaseTest {
     private PublicaPedidoInputPort publicaPedidoInputPort;
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
+    @Mock
+    private BuscaClienteOutputPort buscaClienteOutputPort;
     @InjectMocks
     private PedidoMapper pedidoMapper;
     private PedidoRepository pedidoRepository;
@@ -43,7 +48,7 @@ public class BuscarPedidoPorIdUseCaseTest {
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
         pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
-        pedidoUseCase = new BuscarPedidoPorIdUseCase(pedidoRepository);
+        pedidoUseCase = new BuscarPedidoPorIdUseCase(pedidoRepository, buscaClienteOutputPort);
     }
 
     @AfterEach
@@ -57,6 +62,7 @@ public class BuscarPedidoPorIdUseCaseTest {
         //Arrange
         Long id = 1L;
         when(pedidoJpaRepository.findById(any())).thenReturn(Optional.of(PedidoHelper.criaPedido()));
+        when(buscaClienteOutputPort.buscar(anyLong())).thenReturn(ClienteHelper.criaClienteDTO());
 
         //Act
         PedidoDTO pedido = pedidoUseCase.buscarPorId(id);
@@ -68,6 +74,7 @@ public class BuscarPedidoPorIdUseCaseTest {
             assertThat(p.valorTotal()).isEqualTo(BigDecimal.valueOf(1L));
         });
 
+        verify(buscaClienteOutputPort, times(1)).buscar(anyLong());
         verify(pedidoJpaRepository, times(1)).findById(any());
     }
 

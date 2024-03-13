@@ -9,11 +9,13 @@ import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotF
 import br.com.fiap.techchallenge.servicopedido.core.dtos.AtualizaImagemProdutoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ProdutoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
-import br.com.fiap.techchallenge.servicopedido.utils.ObjectParaJsonMapper;
 import br.com.fiap.techchallenge.servicopedido.utils.ProdutoHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,10 +26,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
 public class ProdutoControllerTest {
 
     private MockMvc mockMvc;
     private AutoCloseable openMocks;
+    @Autowired
+    private ObjectMapper mapper;
     @Mock
     private CriaProdutoInputPort criaProdutoInputPort;
     @Mock
@@ -78,7 +83,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(post("/produtos")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest))
+                            .content(mapper.writeValueAsString(produtoRequest))
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated())
                     .andExpectAll(
@@ -108,7 +113,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(post("/produtos")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest)))
+                            .content(mapper.writeValueAsString(produtoRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("O campo 'nome' é obrigatório"));
         }
@@ -125,7 +130,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(post("/produtos")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest)))
+                            .content(mapper.writeValueAsString(produtoRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("O campo 'categoria' é obrigatório"));
         }
@@ -142,7 +147,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(post("/produtos")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest)))
+                            .content(mapper.writeValueAsString(produtoRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("O campo 'preco' é obrigatório"));
         }
@@ -159,7 +164,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(post("/produtos")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest)))
+                            .content(mapper.writeValueAsString(produtoRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("O campo 'descricao' é obrigatório"));
         }
@@ -180,7 +185,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(put("/produtos/{id}", 1L)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest))
+                            .content(mapper.writeValueAsString(produtoRequest))
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpectAll(
@@ -210,7 +215,7 @@ public class ProdutoControllerTest {
             //Assert
             mockMvc.perform(put("/produtos/{id}", id)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(ObjectParaJsonMapper.converte(produtoRequest)))
+                            .content(mapper.writeValueAsString(produtoRequest)))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value(mensagem));
 

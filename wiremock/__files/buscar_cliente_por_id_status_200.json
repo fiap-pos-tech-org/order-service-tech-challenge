@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "nome": "Cliente Mock",
+  "cpf": "94187479015",
+  "email": "cliente1@gmail.com",
+  "telefone": "(34) 99988-7766",
+  "endereco": {
+    "id": 1,
+    "logradouro": "Avenida",
+    "rua": "Brasil",
+    "numero": 1500,
+    "bairro": "Centro",
+    "cidade": "Uberlândia",
+    "estado": "MG"
+  }
+}

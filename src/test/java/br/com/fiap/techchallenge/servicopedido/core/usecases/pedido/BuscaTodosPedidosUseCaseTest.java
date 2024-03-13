@@ -6,6 +6,8 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemP
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemDTOBase;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
+import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +30,8 @@ public class BuscaTodosPedidosUseCaseTest {
     private PublicaPedidoInputPort publicaPedidoInputPort;
     @Mock
     private ItemPedidoMapper itemPedidoMapper;
+    @Mock
+    BuscaClienteOutputPort buscaClienteOutputPort;
     @InjectMocks
     private PedidoMapper pedidoMapper;
     private PedidoRepository pedidoRepository;
@@ -39,7 +43,7 @@ public class BuscaTodosPedidosUseCaseTest {
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
         pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
-        pedidoUseCase = new BuscaTodosPedidosUseCase(pedidoRepository);
+        pedidoUseCase = new BuscaTodosPedidosUseCase(pedidoRepository, buscaClienteOutputPort);
     }
 
     @AfterEach
@@ -51,7 +55,7 @@ public class BuscaTodosPedidosUseCaseTest {
     void deveBuscarTodosOsPedidos_QuandoMetodoBuscarTodosForInvocado() {
         //Arrange
         when(pedidoJpaRepository.findAll()).thenReturn(PedidoHelper.criaListaPedidos());
-        doNothing().when(publicaPedidoInputPort).publicar(any(MensagemDTOBase.class), anyString());
+        when(buscaClienteOutputPort.buscar(anyLong())).thenReturn(ClienteHelper.criaClienteDTO());
 
         //Act
         List<PedidoDTO> listaPedidos = pedidoUseCase.buscarTodos();
@@ -66,5 +70,6 @@ public class BuscaTodosPedidosUseCaseTest {
         });
 
         verify(pedidoJpaRepository, times(1)).findAll();
+        verify(buscaClienteOutputPort, times(1)).buscar(anyLong());
     }
 }
