@@ -7,15 +7,9 @@ import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.produto.*;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.squareup.okhttp.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDateTime;
 
 @Configuration
 public class CoreInjectionConfig {
@@ -90,20 +84,4 @@ public class CoreInjectionConfig {
     OkHttpClient okHttpClient() {
         return new OkHttpClient();
     }
-
-//    @Bean
-//    public JsonMapper getJsonMapper() {
-//        return JsonMapper.builder()
-//                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-//                .findAndAddModules()
-//                .addModule(new JavaTimeModule())
-//                .addModule(localDateTimeModule())
-//                .build();
-//    }
-//
-//    private SimpleModule localDateTimeModule() {
-//        var module = new SimpleModule();
-//        module.addSerializer(LocalDateTime.class, new LocalDateSerializer());
-//        return module;
-//    }
 }
