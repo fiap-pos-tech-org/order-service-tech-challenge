@@ -4,9 +4,11 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.PedidoReposit
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpaRepository;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemDTOBase;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +27,8 @@ public class BuscaTodosPedidosUseCaseTest {
     @Mock
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
+    private PublicaPedidoInputPort publicaPedidoInputPort;
+    @Mock
     private ItemPedidoMapper itemPedidoMapper;
     @Mock
     BuscaClienteOutputPort buscaClienteOutputPort;
@@ -38,7 +42,7 @@ public class BuscaTodosPedidosUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository);
+        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
         pedidoUseCase = new BuscaTodosPedidosUseCase(pedidoRepository, buscaClienteOutputPort);
     }
 

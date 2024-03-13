@@ -9,6 +9,9 @@ public class ClienteResponse {
     private String telefone;
     private EnderecoResponse endereco;
 
+    public ClienteResponse() {
+    }
+
     public ClienteResponse(Long id, String nome, String cpf, String email, String telefone, EnderecoResponse endereco) {
         this.id = id;
         this.nome = nome;

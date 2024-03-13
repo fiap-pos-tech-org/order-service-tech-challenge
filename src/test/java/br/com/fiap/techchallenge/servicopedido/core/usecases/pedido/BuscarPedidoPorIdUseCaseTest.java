@@ -10,6 +10,7 @@ import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotF
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,8 @@ public class BuscarPedidoPorIdUseCaseTest {
     @Mock
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
+    private PublicaPedidoInputPort publicaPedidoInputPort;
+    @Mock
     private ItemPedidoMapper itemPedidoMapper;
     @Mock
     private BuscaClienteOutputPort buscaClienteOutputPort;
@@ -44,7 +47,7 @@ public class BuscarPedidoPorIdUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository);
+        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
         pedidoUseCase = new BuscarPedidoPorIdUseCase(pedidoRepository, buscaClienteOutputPort);
     }
 

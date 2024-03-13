@@ -1,17 +1,11 @@
 package br.com.fiap.techchallenge.servicopedido.config;
 
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPedidosInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscaTodosPedidosOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.BuscarPedidoPorIdOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.CriaPedidoOutputPort;
+import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.*;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscaTodosPedidosUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.BuscarPedidoPorIdUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.CriaPedidoUseCase;
+import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.produto.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -71,6 +65,11 @@ public class CoreInjectionConfig {
     }
 
     @Bean
+    AtualizaStatusPedidoInputPort atualizaStatusPedido(AtualizaStatusPedidoOutputPort atualizaStatusPedidoOutputPort){
+        return new AtualizaStatusPedidoUseCase(atualizaStatusPedidoOutputPort);
+    }
+
+    @Bean
     BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort,
                                                  BuscaClienteOutputPort buscaClienteOutputPort) {
         return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort, buscaClienteOutputPort);
@@ -83,24 +82,28 @@ public class CoreInjectionConfig {
     }
 
     @Bean
+    PublicaPedidoInputPort publicaPedidoInputPort(PublicaPedidoOutputPort publicaPedidoOutputPort) {
+        return new PublicaPedidoUseCase(publicaPedidoOutputPort);
+    }
+
+    @Bean
     OkHttpClient okHttpClient() {
         return new OkHttpClient();
     }
 
-    @Bean
-    public JsonMapper getJsonMapper() {
-        return JsonMapper.builder()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .findAndAddModules()
-                .addModule(new JavaTimeModule())
-                .addModule(localDateTimeModule())
-                .build();
-    }
-
-    private SimpleModule localDateTimeModule() {
-        var module = new SimpleModule();
-        module.addSerializer(LocalDateTime.class, new LocalDateSerializer());
-        return module;
-    }
-
+//    @Bean
+//    public JsonMapper getJsonMapper() {
+//        return JsonMapper.builder()
+//                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+//                .findAndAddModules()
+//                .addModule(new JavaTimeModule())
+//                .addModule(localDateTimeModule())
+//                .build();
+//    }
+//
+//    private SimpleModule localDateTimeModule() {
+//        var module = new SimpleModule();
+//        module.addSerializer(LocalDateTime.class, new LocalDateSerializer());
+//        return module;
+//    }
 }

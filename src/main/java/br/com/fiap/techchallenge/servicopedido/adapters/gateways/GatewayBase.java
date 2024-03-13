@@ -2,6 +2,7 @@ package br.com.fiap.techchallenge.servicopedido.adapters.gateways;
 
 import br.com.fiap.techchallenge.servicopedido.adapters.web.handlers.ErrorDetails;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.NotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -11,7 +12,7 @@ import java.util.Objects;
 public abstract class GatewayBase {
 
     protected <T> T newCall(Request request, Class<T> clazz) {
-        var mapper = getJsonMapper();
+        var mapper = mapper();
 
         try {
             var response = getHttpClient().newCall(request).execute();
@@ -31,6 +32,6 @@ public abstract class GatewayBase {
 
     protected abstract OkHttpClient getHttpClient();
 
-    protected abstract JsonMapper getJsonMapper();
+    protected abstract ObjectMapper mapper();
 
 }

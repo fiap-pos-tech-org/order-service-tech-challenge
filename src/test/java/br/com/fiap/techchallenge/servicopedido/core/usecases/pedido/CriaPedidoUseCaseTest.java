@@ -5,7 +5,9 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.jpa.PedidoJpa
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.ItemPedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.PedidoMapper;
 import br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Pedido;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemDTOBase;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.PedidoDTO;
+import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.PublicaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.BuscaProdutoPorIdOutputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.ClienteHelper;
@@ -32,6 +34,8 @@ public class CriaPedidoUseCaseTest {
     @Mock
     private PedidoJpaRepository pedidoJpaRepository;
     @Mock
+    private PublicaPedidoInputPort publicaPedidoInputPort;
+    @Mock
     private ItemPedidoMapper itemPedidoMapper;
     @InjectMocks
     private PedidoMapper pedidoMapper;
@@ -45,7 +49,7 @@ public class CriaPedidoUseCaseTest {
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
 
-        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository);
+        pedidoRepository = new PedidoRepository(pedidoMapper, pedidoJpaRepository, publicaPedidoInputPort);
         pedidoUseCase = new CriaPedidoUseCase(pedidoRepository, buscaProdutoPorIdOutputPort, buscaClienteOutputPort);
     }
 
@@ -56,6 +60,7 @@ public class CriaPedidoUseCaseTest {
         when(buscaClienteOutputPort.buscar(anyLong())).thenReturn(ClienteHelper.criaClienteDTO());
         when(buscaProdutoPorIdOutputPort.buscarPorId(anyLong())).thenReturn(ProdutoHelper.criaProdutoDTO());
         when(pedidoJpaRepository.save(any(Pedido.class))).thenReturn(PedidoHelper.criaPedido());
+        doNothing().when(publicaPedidoInputPort).publicar(any(MensagemDTOBase.class), anyString());
 
         //Act
         PedidoDTO pedidoDTO = pedidoUseCase.criar(PedidoHelper.criaCriaPedidoDTO());

@@ -4,7 +4,7 @@ import br.com.fiap.techchallenge.servicopedido.adapters.repository.mappers.Clien
 import br.com.fiap.techchallenge.servicopedido.adapters.web.models.responses.ClienteResponse;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.ClienteDTO;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +16,14 @@ public class ClienteGateway extends GatewayBase implements BuscaClienteOutputPor
     private final OkHttpClient httpClient;
     private final ClienteMapper clienteMapper;
     private final String urlApiClientes;
-    private final JsonMapper jsonMapper;
+    private final ObjectMapper mapper;
 
     public ClienteGateway(OkHttpClient httpClient, ClienteMapper clienteMapper, @Value("${clientes.api.url}") String urlApiClientes,
-                          JsonMapper jsonMapper) {
+                          ObjectMapper mapper) {
         this.httpClient = httpClient;
         this.clienteMapper = clienteMapper;
         this.urlApiClientes = urlApiClientes;
-        this.jsonMapper = jsonMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ClienteGateway extends GatewayBase implements BuscaClienteOutputPor
     }
 
     @Override
-    protected JsonMapper getJsonMapper() {
-        return this.jsonMapper;
+    protected ObjectMapper mapper() {
+        return this.mapper;
     }
 }

@@ -10,6 +10,9 @@ public class EnderecoResponse {
     private String cidade;
     private String estado;
 
+    public EnderecoResponse() {
+    }
+
     public EnderecoResponse(Long id, String logradouro, String rua, Integer numero, String bairro, String cidade, String estado) {
         this.id = id;
         this.logradouro = logradouro;

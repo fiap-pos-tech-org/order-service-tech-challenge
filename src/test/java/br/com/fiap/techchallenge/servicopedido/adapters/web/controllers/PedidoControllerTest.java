@@ -10,7 +10,7 @@ import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscaTodosPe
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.BuscarPedidoPorIdInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.CriaPedidoInputPort;
 import br.com.fiap.techchallenge.servicopedido.utils.PedidoHelper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +30,7 @@ public class PedidoControllerTest {
     private MockMvc mockMvc;
     private AutoCloseable openMocks;
     @Autowired
-    private JsonMapper jsonMapper;
+    private ObjectMapper mapper;
     @Mock
     private CriaPedidoInputPort criaPedidoInputPort;
     @Mock
@@ -75,7 +75,7 @@ public class PedidoControllerTest {
             //Assert
             mockMvc.perform(post("/pedidos")
                             .contentType("application/json")
-                            .content(jsonMapper.writeValueAsString(PedidoHelper.criaPedidoRequest())))
+                            .content(mapper.writeValueAsString(PedidoHelper.criaPedidoRequest())))
                     .andExpect(status().isCreated())
                     .andExpectAll(
                             jsonPath("$.id").value(1),
