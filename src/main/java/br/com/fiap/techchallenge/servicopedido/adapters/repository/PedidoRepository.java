@@ -46,7 +46,7 @@ public class PedidoRepository implements CriaPedidoOutputPort, BuscaTodosPedidos
         var pedidoSalvo = pedidoJpaRepository.save(pedido);
         var mensagem = new MensagemPedidoPagamentoDTO(
                 pedidoSalvo.getId(),
-                pedidoSalvo.getCliente().getId(),
+                pedidoSalvo.getClienteId(),
                 pedidoSalvo.getValorTotal()
         );
 
@@ -67,7 +67,6 @@ public class PedidoRepository implements CriaPedidoOutputPort, BuscaTodosPedidos
         var pedidoBuscado = buscarPedidoPorId(id);
         return pedidoMapper.toPedidoDTO(pedidoBuscado);
     }
-
 
     private br.com.fiap.techchallenge.servicopedido.adapters.repository.models.Pedido buscarPedidoPorId(Long id) {
         return pedidoJpaRepository.findById(id)

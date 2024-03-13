@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import java.util.List;
+
 @Entity
 public class Pedido {
     @Id
@@ -17,13 +17,15 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     private StatusPedidoEnum status;
+
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
 
     private LocalDateTime data;
-    @ManyToOne
+
     @Nullable
-    private Cliente cliente;
+    private Long clienteId;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, targetEntity = ItemPedido.class)
     private List<ItemPedido> itens = new ArrayList<>();
 
@@ -37,32 +39,34 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(StatusPedidoEnum status, LocalDateTime data, @Nullable Cliente cliente, List<ItemPedido> itens) {
+    public Pedido(StatusPedidoEnum status, LocalDateTime data, @Nullable Long clienteId, List<ItemPedido> itens) {
         this.status = status;
         this.data = data;
-        this.cliente = cliente;
+        this.clienteId = clienteId;
         this.itens = itens;
     }
+
     public Pedido(StatusPedidoEnum status, LocalDateTime data, List<ItemPedido> itens) {
         this.status = status;
         this.data = data;
         this.itens = itens;
     }
 
-    public Pedido(Long id, StatusPedidoEnum status, Cliente cliente, LocalDateTime data, BigDecimal valorTotal) {
+    public Pedido(Long id, StatusPedidoEnum status, Long clienteId, LocalDateTime data, BigDecimal valorTotal) {
         this.id = id;
         this.status = status;
-        this.cliente = cliente;
+        this.clienteId = clienteId;
         this.data = data;
         this.valorTotal = valorTotal;
     }
 
-    public Pedido(StatusPedidoEnum status, Cliente cliente, LocalDateTime data, BigDecimal valorTotal) {
+    public Pedido(StatusPedidoEnum status, Long clienteId, LocalDateTime data, BigDecimal valorTotal) {
         this.status = status;
-        this.cliente = cliente;
+        this.clienteId = clienteId;
         this.data = data;
         this.valorTotal = valorTotal;
     }
+
     public Pedido(StatusPedidoEnum status, LocalDateTime data, BigDecimal valorTotal) {
         this.status = status;
         this.data = data;
@@ -84,6 +88,7 @@ public class Pedido {
     public void setStatus(StatusPedidoEnum status) {
         this.status = status;
     }
+
     public LocalDateTime getData() {
         return data;
     }
@@ -93,12 +98,12 @@ public class Pedido {
     }
 
     @Nullable
-    public Cliente getCliente() {
-        return cliente;
+    public Long getClienteId() {
+        return clienteId;
     }
 
-    public void setCliente(@Nullable Cliente cliente) {
-        this.cliente = cliente;
+    public void setClienteId(@Nullable Long clienteId) {
+        this.clienteId = clienteId;
     }
 
     public List<ItemPedido> getItens() {
@@ -116,4 +121,5 @@ public class Pedido {
     public BigDecimal setValorTotal() {
         return valorTotal;
     }
+
 }

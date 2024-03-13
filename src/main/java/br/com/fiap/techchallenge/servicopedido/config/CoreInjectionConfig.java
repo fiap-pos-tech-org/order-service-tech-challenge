@@ -1,23 +1,13 @@
 package br.com.fiap.techchallenge.servicopedido.config;
 
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.AtualizaClienteInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaClientePorIdOuCpfInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.BuscaTodosClientesInputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.in.cliente.CadastraClienteInputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.produto.*;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.AtualizaClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaClienteOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.BuscaTodosClientesOutputPort;
-import br.com.fiap.techchallenge.servicopedido.core.ports.out.cliente.CadastraClienteOutputPort;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.ports.out.produto.*;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.AtualizaClienteUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaClientePorIdOuCpfIdOuCpfUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.BuscaTodosClientesUseCase;
-import br.com.fiap.techchallenge.servicopedido.core.usecases.cliente.CadastraClienteUseCase;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.pedido.*;
 import br.com.fiap.techchallenge.servicopedido.core.usecases.produto.*;
+import com.squareup.okhttp.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -60,26 +50,6 @@ public class CoreInjectionConfig {
     }
 
     @Bean
-    AtualizaClienteInputPort atualizaCliente(AtualizaClienteOutputPort atualizaClienteOutputPort) {
-        return new AtualizaClienteUseCase(atualizaClienteOutputPort);
-    }
-
-    @Bean
-    BuscaClientePorIdOuCpfInputPort buscaClientePorCpf(BuscaClienteOutputPort buscaClienteOutputPort) {
-        return new BuscaClientePorIdOuCpfIdOuCpfUseCase(buscaClienteOutputPort);
-    }
-
-    @Bean
-    BuscaTodosClientesInputPort buscaTodosClientes(BuscaTodosClientesOutputPort buscaTodosClientesOutputPort) {
-        return new BuscaTodosClientesUseCase(buscaTodosClientesOutputPort);
-    }
-
-    @Bean
-    CadastraClienteInputPort cadastraCliente(CadastraClienteOutputPort cadastraClienteOutputPort) {
-        return new CadastraClienteUseCase(cadastraClienteOutputPort);
-    }
-
-    @Bean
     CriaPedidoInputPort criarPedido(
             CriaPedidoOutputPort criaPedidoOutputPort,
             BuscaProdutoPorIdOutputPort buscaProdutoPorIdOutputPort,
@@ -94,17 +64,24 @@ public class CoreInjectionConfig {
     }
 
     @Bean
-    BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort) {
-        return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort);
+    BuscarPedidoPorIdInputPort buscarPedidoPorId(BuscarPedidoPorIdOutputPort buscarPedidoPorIdOutputPort,
+                                                 BuscaClienteOutputPort buscaClienteOutputPort) {
+        return new BuscarPedidoPorIdUseCase(buscarPedidoPorIdOutputPort, buscaClienteOutputPort);
     }
 
     @Bean
-    BuscaTodosPedidosInputPort buscarTodosPedidos(BuscaTodosPedidosOutputPort buscaTodosPedidosOutputPort) {
-        return new BuscaTodosPedidosUseCase(buscaTodosPedidosOutputPort);
+    BuscaTodosPedidosInputPort buscarTodosPedidos(BuscaTodosPedidosOutputPort buscaTodosPedidosOutputPort,
+                                                  BuscaClienteOutputPort buscaClienteOutputPort) {
+        return new BuscaTodosPedidosUseCase(buscaTodosPedidosOutputPort, buscaClienteOutputPort);
     }
 
     @Bean
     PublicaPedidoInputPort publicaPedidoInputPort(PublicaPedidoOutputPort publicaPedidoOutputPort) {
         return new PublicaPedidoUseCase(publicaPedidoOutputPort);
+    }
+
+    @Bean
+    OkHttpClient okHttpClient() {
+        return new OkHttpClient();
     }
 }
