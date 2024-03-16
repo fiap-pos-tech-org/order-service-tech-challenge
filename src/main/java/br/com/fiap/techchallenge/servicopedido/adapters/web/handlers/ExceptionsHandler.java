@@ -4,8 +4,8 @@ import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.BadRequest
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityAlreadyExistException;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class ExceptionsHandler {
-    Logger logger = LoggerFactory.getLogger(ExceptionsHandler.class);
+    Logger logger = LogManager.getLogger(ExceptionsHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -10,7 +10,8 @@ public enum StatusPedidoEnum {
     EM_PREPARACAO("Em preparação"),
     PRONTO("Pronto"),
     FINALIZADO("Finalizado"),
-    CANCELADO ("Cancelado");
+    CANCELADO ("Cancelado"),
+    RECUSADO ("Recusado");
 
     private final String descricao;
 

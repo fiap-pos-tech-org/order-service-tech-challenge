@@ -3,7 +3,6 @@ package br.com.fiap.techchallenge.servicopedido.adapters.gateways;
 import br.com.fiap.techchallenge.servicopedido.adapters.web.handlers.ErrorDetails;
 import br.com.fiap.techchallenge.servicopedido.core.domain.exceptions.NotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
