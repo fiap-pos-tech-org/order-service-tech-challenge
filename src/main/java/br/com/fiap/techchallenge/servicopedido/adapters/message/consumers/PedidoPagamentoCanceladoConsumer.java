@@ -5,7 +5,8 @@ import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamento
 import br.com.fiap.techchallenge.servicopedido.core.ports.in.pedido.AtualizaStatusPedidoInputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PedidoPagamentoCanceladoConsumer {
 
+    private final Logger logger = LogManager.getLogger(PedidoPagamentoCanceladoConsumer.class);
     private final AtualizaStatusPedidoInputPort atualizaStatusPedidoInputPort;
     private final ObjectMapper mapper;
 
@@ -21,11 +23,16 @@ public class PedidoPagamentoCanceladoConsumer {
         this.mapper = mapper;
     }
 
-    @Transactional
     @JmsListener(destination = "${aws.sqs.fila-pagamento-cancelado}")
-    public void receiveMessage(@Payload String mensagem) throws JsonProcessingException {
-        System.out.printf("Mensagem recebida do serviço pagamento %s\n", mensagem);
-        var pedido = mapper.readValue(mensagem, MensagemPedidoPagamentoDTO.class);
+    public void receiveMessage(@Payload String mensagem) {
+        logger.info("mensagem recebida do serviço pagamento: {}", mensagem);
+        MensagemPedidoPagamentoDTO pedido;
+        try {
+            pedido = mapper.readValue(mensagem, MensagemPedidoPagamentoDTO.class);
+        } catch (JsonProcessingException e) {
+            logger.error("erro ao serializar mensagem: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
         atualizaStatusPedidoInputPort.atualizarStatus(pedido.getIdPedido(), StatusPedidoEnum.CANCELADO);
     }
 }
