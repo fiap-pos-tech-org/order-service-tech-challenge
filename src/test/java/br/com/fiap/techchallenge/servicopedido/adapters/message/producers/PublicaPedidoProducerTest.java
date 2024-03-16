@@ -1,6 +1,7 @@
 package br.com.fiap.techchallenge.servicopedido.adapters.message.producers;
 
 import br.com.fiap.techchallenge.servicopedido.core.domain.entities.enums.StatusPedidoEnum;
+import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoPagamentoDTO;
 import br.com.fiap.techchallenge.servicopedido.core.dtos.MensagemPedidoProducaoDTO;
 import br.com.fiap.techchallenge.servicopedido.utils.ItemPedidoHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +17,7 @@ import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,12 +32,14 @@ public class PublicaPedidoProducerTest {
     @InjectMocks
     private PublicaPedidoProducer publicaPedidoProducer;
     private MensagemPedidoProducaoDTO mensagemPedidoProducao;
+    private MensagemPedidoPagamentoDTO mensagemPedidoPagamento;
     private AutoCloseable openMocks;
 
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
         mensagemPedidoProducao = new MensagemPedidoProducaoDTO(1L, StatusPedidoEnum.PRONTO, ItemPedidoHelper.criaListaItemPedidoDTO());
+        mensagemPedidoPagamento = new MensagemPedidoPagamentoDTO(1L, 2L, BigDecimal.valueOf(59.9));
     }
 
     @AfterEach
@@ -49,10 +53,10 @@ public class PublicaPedidoProducerTest {
         //Arrange
         PublishResponse response = PublishResponse.builder().messageId(UUID.randomUUID().toString()).build();
         when(snsClient.publish(any(PublishRequest.class))).thenReturn(response);
-        when(mapper.writeValueAsString(any())).thenReturn(new ObjectMapper().writeValueAsString(mensagemPedidoProducao));
+        when(mapper.writeValueAsString(any())).thenReturn(new ObjectMapper().writeValueAsString(mensagemPedidoPagamento));
 
         //Act
-        publicaPedidoProducer.publicar(mensagemPedidoProducao, "arn::0001");
+        publicaPedidoProducer.publicar(mensagemPedidoPagamento, "arn::0001");
 
         //Assert
         verify(snsClient, times(1)).publish(any(PublishRequest.class));
@@ -62,11 +66,11 @@ public class PublicaPedidoProducerTest {
     @DisplayName("Deve lançar RuntimeException quando objeto mensagem não for serializado")
     void deveLancarRuntimeException_QuandoObjetoMensagemNaoForSerializado() throws JsonProcessingException {
         //Arrange
-        when(mapper.writeValueAsString(any(MensagemPedidoProducaoDTO.class))).thenThrow(JsonProcessingException.class);
+        when(mapper.writeValueAsString(any(MensagemPedidoPagamentoDTO.class))).thenThrow(JsonProcessingException.class);
 
         //Act
         //Assert
-        assertThatThrownBy(() -> publicaPedidoProducer.publicar(mensagemPedidoProducao, "arn::0001"))
+        assertThatThrownBy(() -> publicaPedidoProducer.publicar(mensagemPedidoPagamento, "arn::0001"))
                 .isInstanceOf(RuntimeException.class);
 
         verify(snsClient, times(0)).publish(any(PublishRequest.class));

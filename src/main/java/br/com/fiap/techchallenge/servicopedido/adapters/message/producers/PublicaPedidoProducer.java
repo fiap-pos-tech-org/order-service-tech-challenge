@@ -19,7 +19,6 @@ public class PublicaPedidoProducer implements PublicaPedidoOutputPort {
 
     @Value("${aws.sns.group-id}")
     private String messageGroupId;
-
     private final SnsClient snsClient;
     private final ObjectMapper mapper;
 
