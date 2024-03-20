@@ -71,7 +71,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to EKS cluster
-        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER }} --region ${{ vars.AWS_REGION }}
 
       - name: Login to DockerHub
         run: docker login -u geter -p ${{ secrets.DOCKERHUB_TOKEN }}
@@ -96,9 +96,9 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
           TOPICO_PAGAMENTO_PENDENTE_ARN: ${{ vars.TOPICO_PAGAMENTO_PENDENTE_ARN }}
           TOPICO_PRODUCAO_ARN: ${{ vars.TOPICO_PRODUCAO_ARN }}
-          FILA_PEDIDO_PRONTO: ${{ vars.FILA_PEDIDO_PRONTO }}
-          FILA_PAGAMENTO_APROVADO: ${{ vars.FILA_PAGAMENTO_APROVADO }}
-          FILA_PAGAMENTO_RECUSADO: ${{ vars.FILA_PAGAMENTO_RECUSADO }}
-          FILA_PAGAMENTO_CANCELADO: ${{ vars.FILA_PAGAMENTO_CANCELADO }}
+          FILA_PEDIDO_PRONTO: ${{vars.FILA_PEDIDO_PRONTO}}
+          FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
+          FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
+          FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
           GROUP_ID: ${{ vars.GROUP_ID }}
           ENV: ${{ vars.ENV }}
