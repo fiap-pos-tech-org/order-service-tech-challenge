@@ -36,6 +36,8 @@ spec:
               value: ${FILA_PAGAMENTO_RECUSADO}
             - name: FILA_PAGAMENTO_CANCELADO
               value: ${FILA_PAGAMENTO_CANCELADO}
+            - name: CLIENTES_API_URL
+              value: ${CLIENTES_API_URL}
             - name: GROUP_ID
               value: ${GROUP_ID}
             - name: ENV
