@@ -100,5 +100,6 @@ jobs:
           FILA_PAGAMENTO_APROVADO: ${{vars.FILA_PAGAMENTO_APROVADO}}
           FILA_PAGAMENTO_RECUSADO: ${{vars.FILA_PAGAMENTO_RECUSADO}}
           FILA_PAGAMENTO_CANCELADO: ${{vars.FILA_PAGAMENTO_CANCELADO}}
+          CLIENTES_API_URL: ${{vars.CLIENTES_API_URL}}
           GROUP_ID: ${{ vars.GROUP_ID }}
           ENV: ${{ vars.ENV }}
