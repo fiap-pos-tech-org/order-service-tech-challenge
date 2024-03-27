@@ -49,7 +49,7 @@ spec:
             path: /home/servico-pedido-volume
             type: DirectoryOrCreate
       serviceAccountName: pedido-serviceaccount
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: servico-pedido
